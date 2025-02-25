@@ -8,8 +8,10 @@ __pycache__/
 
 # C# build
 obj/
+bin/
 .Motion.csproj
 .vs/
+
 
 
 # Distribution / packaging
