@@ -1,0 +1,7 @@
+### For gym's abstract classes for RL, install:
+PM> Install-Package Gym.NET
+
+### For implemented environments, install:
+PM> Install-Package Gym.NET.Environments
+PM> Install-Package Gym.NET.Rendering.Avalonia
+PM> Install-Package Gym.NET.Rendering.WinForm

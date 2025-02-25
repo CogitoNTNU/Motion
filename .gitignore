@@ -6,6 +6,11 @@ __pycache__/
 # C extensions
 *.so
 
+# C# build
+.obj/
+.Motion.csproj
+.vs/
+
 # Distribution / packaging
 .Python
 build/
