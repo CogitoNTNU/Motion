@@ -6,7 +6,7 @@ using Gym.Environments;
 using Gym.Environments.Envs.Classic;
 using Gym.Rendering.WinForm;
 
-namespace MotionAI
+namespace Motion
 {
     class Program
     {
