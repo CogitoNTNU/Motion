@@ -4,7 +4,7 @@ using NumSharp;
 using SixLabors.ImageSharp;
 using Gym.Environments;
 using Gym.Environments.Envs.Classic;
-using Gym.Rendering.WinForm;
+using Gym.Rendering.Avalonia;
 
 namespace Motion
 {
@@ -12,7 +12,7 @@ namespace Motion
     {
         static void Main(string[] args)
         {
-            CartPoleEnv cp = new CartPoleEnv(WinFormEnvViewer.Factory); // or AvaloniaEnvViewer.Factory
+            CartPoleEnv cp = new CartPoleEnv(AvaloniaEnvViewer.Factory); // or AvaloniaEnvViewer.Factory
             bool done = true;
             for (int i = 0; i < 100_000; i++)
             {
