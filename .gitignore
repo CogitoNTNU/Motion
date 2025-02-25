@@ -11,6 +11,7 @@ obj/
 bin/
 .Motion.csproj
 .vs/
+.install-Package
 
 
 
