@@ -7,9 +7,10 @@ __pycache__/
 *.so
 
 # C# build
-.obj/
+obj/
 .Motion.csproj
 .vs/
+
 
 # Distribution / packaging
 .Python
