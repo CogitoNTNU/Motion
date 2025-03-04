@@ -1,2 +1,13 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿
+
+
+namespace Motion
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            GymRunner.RunGymEnvironment();
+        }
+    }
+}

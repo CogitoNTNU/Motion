@@ -8,9 +8,9 @@ using Gym.Rendering.Avalonia;
 
 namespace Motion
 {
-    class Program
+    class GymRunner
     {
-        static void Main(string[] args)
+        public static void RunGymEnvironment()
         {
             CartPoleEnv cp = new CartPoleEnv(AvaloniaEnvViewer.Factory); // or AvaloniaEnvViewer.Factory
             bool done = true;
@@ -26,6 +26,7 @@ namespace Motion
                     var (observation, reward, _done, information) = cp.Step((i % 2)); // switching between left and right
                     done = _done;
                     // Do something with the reward and observation.
+                    
                 }
 
                 Image img = cp.Render(); // Returns the rendered image.
