@@ -23,17 +23,24 @@ namespace Motion
                 }
                 else
                 {
-                    var (observation, reward, _done, information) = cp.Step((i % 2)); // switching between left and right
+                    var action = (i % 2); // switching between left and right
+                    var (observation, reward, _done, information) = cp.Step(action); 
                     done = _done;
                     // Do something with the reward and observation.
+
+                    Console.WriteLine("reward:   " + reward);
+                    Console.WriteLine("obs:   " + observation);
+                   
+
+                    
                     
                 }
 
-                Image img = cp.Render(); // Returns the rendered image.
+                SixLabors.ImageSharp.Image img = cp.Render(); //returns the image that was rendered.
                 Thread.Sleep(15); // Prevent the loop from finishing instantly.
             }
 
-            
+          
         }
     }
 }
