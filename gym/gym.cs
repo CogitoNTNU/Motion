@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using Avalonia.Threading;
 using NumSharp;
 using SixLabors.ImageSharp;
 using Gym.Environments;
@@ -16,6 +17,7 @@ namespace Motion
             bool done = true;
             for (int i = 0; i < 100_000; i++)
             {
+                Console.WriteLine("Hello world" + i); // Output line for testing
                 if (done)
                 {
                     NDArray observation = cp.Reset();
@@ -28,8 +30,12 @@ namespace Motion
                     // Do something with the reward and observation.
                     
                 }
+                // Utfør UI-operasjoner på Avalonia-tråden
+                Dispatcher.UIThread.Post(() =>
+                {
+                    Image img = cp.Render(); // Render bildet på UI-tråden
+                });
 
-                Image img = cp.Render(); // Returns the rendered image.
                 Thread.Sleep(15); // Prevent the loop from finishing instantly.
             }
 
