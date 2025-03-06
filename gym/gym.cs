@@ -13,21 +13,27 @@ namespace Motion
     {
         public static void RunGymEnvironment()
         {
-            CartPoleEnv cp = new CartPoleEnv(AvaloniaEnvViewer.Factory); // or AvaloniaEnvViewer.Factory
+            CartPoleEnv cp = new CartPoleEnv(AvaloniaEnvViewer.Factory); 
             bool done = true;
-            for (int i = 0; i < 100_000; i++)
+            PopulationManager popManager = new PopulationManager();
+
+            for (int i = 0; i < 100; i++)
             {
                 Console.WriteLine("Hello world" + i); // Output line for testing
+                NDArray observation;
                 if (done)
                 {
-                    NDArray observation = cp.Reset();
+                    observation = cp.Reset();
                     done = false;
                 }
                 else
                 {
-                    var (observation, reward, _done, information) = cp.Step((i % 2)); // switching between left and right
+                    int action = i % 2; // switching between left and right
+                    var (obs, reward, _done, information) = cp.Step(action); 
+                    observation = obs;
                     done = _done;
-                    // Do something with the reward and observation.
+
+                    popManager.AddData(observation, reward, action);
                     
                 }
                 // Utfør UI-operasjoner på Avalonia-tråden
@@ -39,7 +45,7 @@ namespace Motion
                 Thread.Sleep(15); // Prevent the loop from finishing instantly.
             }
 
-            
+            popManager.SaveToFile("YOUR PATH FILE HERE"); // ENTER YOUR PATH FILE TO "populationData.json"
         }
     }
 }
