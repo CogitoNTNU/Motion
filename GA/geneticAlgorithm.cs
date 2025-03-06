@@ -2,33 +2,19 @@ using System.ComponentModel;
 
 namespace Motion{
 
-
-    class GeneticAlgorithm{
+    class GeneticAlgorithm {
         public Agent[] population;
+        public Config config = Config.Instance();
 
-        public GeneticAlgorithm(){
-            this.population = initializePopulation();
-        }
-        private Agent initializeAgent(){
-            string[] chromosomeNodes = new string[Config.Instance().ChromosomeSize];
-            string[] chromosomeEdges = new string[Config.Instance().ChromosomeSize];
-            // nodes and edges are initialized here
-            for (int i = 0; i < 5; i++)
-            {
-                chromosomeNodes[i] = "node" + i + ",bias" + i + "=0.5"+ ",activation" + i + "=relu";
-            }
-            for (int i = 0; i < 5; i++)
-            {
-                chromosomeEdges[i] = "edge" + i + ", from:"+ 1+ "to:" +i+ ",weight" + i + "=0.5";
-            }
-            return new Agent(chromosomeNodes, chromosomeEdges);
+        public GeneticAlgorithm() {
+            this.population = InitializePopulation();
         }
         
-        private Agent[] initializePopulation(){
-            Agent[] population = new Agent[10];
-            for (int i = 0; i < 10; i++)
+        private Agent[] InitializePopulation(){
+            Agent[] population = new Agent[config.PopulationSize];
+            for (int i = 0; i < config.PopulationSize; i++)
             {
-                population[i] = initializeAgent();
+                population[i] = Agent.InitializeAgent(2, 47, 1);    // must add up to population-size
             }
             return population;
         }

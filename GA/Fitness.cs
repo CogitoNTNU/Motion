@@ -8,7 +8,7 @@ using Gym.Environments.Envs.Classic;
 using Gym.Rendering.Avalonia;
 
 class Fitness{
-    public static float fitnessFunction(int stepsize){
+    public static float FitnessFunction(int stepsize){
         CartPoleEnv cp = new CartPoleEnv(AvaloniaEnvViewer.Factory); // or AvaloniaEnvViewer.Factory
         bool done = true;
         float total_rerward = 0;
