@@ -29,7 +29,6 @@ class Fitness{
                     
                 }
 
-                Image img = cp.Render(); // Returns the rendered image.
                 Thread.Sleep(15); // Prevent the loop from finishing instantly.
             }
 
