@@ -1,9 +1,12 @@
-namespace Motion
+namespace Motion{
 
 
-class GeneticAlgorithm{
-    private  initialPopulation(){
-        
+    class GeneticAlgorithm{
+        private void initializePopulation(){
+
+            
+            
+        }
     }
 }
 

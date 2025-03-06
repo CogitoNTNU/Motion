@@ -1,8 +1,17 @@
-class fitness{
-    public static int fitnessFunction(int stepsize){
+
+using System;
+using System.Threading;
+using NumSharp;
+using SixLabors.ImageSharp;
+using Gym.Environments;
+using Gym.Environments.Envs.Classic;
+using Gym.Rendering.Avalonia;
+
+class Fitness{
+    public static float fitnessFunction(int stepsize){
         CartPoleEnv cp = new CartPoleEnv(AvaloniaEnvViewer.Factory); // or AvaloniaEnvViewer.Factory
         bool done = true;
-        int fitness = 0;
+        float total_rerward = 0;
             for (int i = 0; i < 100_000; i++)
             {
                 if (done)
@@ -16,14 +25,15 @@ class fitness{
                     var (observation, reward, _done, information) = cp.Step(action); // switching between left and right
                     done = _done;
                     // Do something with the reward and observation.
-                    fitness += reward;
+                    total_rerward += reward;
                     
                 }
 
                 Image img = cp.Render(); // Returns the rendered image.
                 Thread.Sleep(15); // Prevent the loop from finishing instantly.
             }
-        return fitness;
+
+        return total_rerward;
     }
 }
 
