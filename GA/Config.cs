@@ -9,8 +9,8 @@ namespace Motion
         private double mutationRate = 0.01;
         private double crossoverRate = 0.8;
         private int elitismCount = 2;
-
         private int chromosomeSize = 10;
+        
         private Config() { 
             instance = this;
         }
