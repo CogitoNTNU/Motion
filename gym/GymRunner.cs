@@ -16,7 +16,7 @@ namespace Motion
         
             CartPoleEnv cp = new CartPoleEnv(AvaloniaEnvViewer.Factory); // or AvaloniaEnvViewer.Factory
             bool done = true;
-            float prediction = 0;
+            double prediction = 0;
             var action = 0;
             
             for (int i = 0; i < 100_000; i++)
