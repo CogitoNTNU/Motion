@@ -124,7 +124,7 @@ namespace Motion{
             this.adjustedFitness = 0.0;
         } 
 
-        private double[] ForwardPass(double[] inputs) {
+        public double[] ForwardPass(double[] inputs) {
 
             Dictionary<int, double> nodeValues = new Dictionary<int, double>();
 
