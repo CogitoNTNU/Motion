@@ -8,31 +8,39 @@ namespace Motion
 {
     public class PopulationManager
     {
-        public List<NDArray> Observations { get; private set; }
-        public List<float> Rewards { get; private set; }
+        public List<NDArray> States { get; private set; }
         public List<int> Actions { get; private set; }
+        public List<float> Rewards { get; private set; }
+        public List<NDArray> NextStates { get; private set; }
+        public List<bool> Dones { get; private set; }
 
         public PopulationManager()
         {
-            Observations = new List<NDArray>();
-            Rewards = new List<float>();
+            States = new List<NDArray>();
             Actions = new List<int>();
+            Rewards = new List<float>();
+            NextStates = new List<NDArray>();
+            Dones = new List<bool>();
         }
 
-        public void AddData(NDArray observation, float reward, int action)
+        public void AddExperience(NDArray state, int action, float reward, NDArray nextState, bool done)
         {
-            Observations.Add(observation);
-            Rewards.Add(reward);
+            States.Add(state);
             Actions.Add(action);
+            Rewards.Add(reward);
+            NextStates.Add(nextState);
+            Dones.Add(done);
         }
 
         public void SaveToFile(string filePath)
         {
             var data = new
             {
-                Observations = Observations.ConvertAll(o => o.ToArray<double>()),
+                States = States.ConvertAll(s => s.ToArray<double>()),
+                Actions,
                 Rewards,
-                Actions
+                NextStates = NextStates.ConvertAll(s => s.ToArray<double>()),
+                Dones
             };
 
             string json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
@@ -46,13 +54,20 @@ namespace Motion
             string json = File.ReadAllText(filePath);
             var data = JsonSerializer.Deserialize<dynamic>(json);
 
-            Observations.Clear();
-            Rewards.Clear();
+            States.Clear();
             Actions.Clear();
+            Rewards.Clear();
+            NextStates.Clear();
+            Dones.Clear();
 
-            foreach (var obs in data["Observations"])
+            foreach (var state in data["States"])
             {
-                Observations.Add(np.array(obs.ToObject<double[]>())); // Konverter tilbake til NDArray
+                States.Add(np.array(state.ToObject<double[]>()));
+            }
+
+            foreach (var action in data["Actions"])
+            {
+                Actions.Add((int)action);
             }
 
             foreach (var reward in data["Rewards"])
@@ -60,9 +75,14 @@ namespace Motion
                 Rewards.Add((float)reward);
             }
 
-            foreach (var action in data["Actions"])
+            foreach (var nextState in data["NextStates"])
             {
-                Actions.Add((int)action);
+                NextStates.Add(np.array(nextState.ToObject<double[]>()));
+            }
+
+            foreach (var done in data["Dones"])
+            {
+                Dones.Add((bool)done);
             }
         }
     }

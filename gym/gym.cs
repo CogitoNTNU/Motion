@@ -17,35 +17,36 @@ namespace Motion
             bool done = true;
             PopulationManager popManager = new PopulationManager();
 
+            NDArray state = cp.Reset(); // Get initial state
+
             for (int i = 0; i < 100; i++)
             {
-                Console.WriteLine("Hello world" + i); // Output line for testing
-                NDArray observation;
-                if (done)
-                {
-                    observation = cp.Reset();
-                    done = false;
-                }
-                else
-                {
-                    int action = i % 2; // switching between left and right
-                    var (obs, reward, _done, information) = cp.Step(action); 
-                    observation = obs;
-                    done = _done;
+                Console.WriteLine("Step: " + i);
 
-                    popManager.AddData(observation, reward, action);
-                    
-                }
-                // Utfør UI-operasjoner på Avalonia-tråden
+                int action = i % 2; // Placeholder: for algorithm
+
+                var (nextState, reward, _done, information) = cp.Step(action);
+
+                popManager.AddExperience(state, action, reward, nextState, _done);
+
+                state = nextState;
+                done = _done;
+
+
                 Dispatcher.UIThread.Post(() =>
                 {
-                    Image img = cp.Render(); // Render bildet på UI-tråden
+                    Image img = cp.Render(); 
                 });
 
-                Thread.Sleep(15); // Prevent the loop from finishing instantly.
+                Thread.Sleep(15);
+
+                if (done)
+                {
+                    state = cp.Reset();
+                }
             }
 
-            popManager.SaveToFile("YOUR PATH FILE HERE"); // ENTER YOUR PATH FILE TO "populationData.json"
+            popManager.SaveToFile("/Users/edvard/Git/Motion/RL/populationData.json");
         }
     }
 }
