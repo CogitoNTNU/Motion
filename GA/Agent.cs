@@ -26,7 +26,7 @@ namespace Motion{
 
         public int Id { get { return id; } }
 
-        public double Bias { get { return bias; } }
+        public double Bias { get { return bias; } set { bias = value; } }
 
         public String Activation { get { return activation; } }
 
@@ -54,11 +54,11 @@ namespace Motion{
 
         public int Edge { get { return edge; } } 
         
-        public int FromId { get { return fromId; } }
+        public int FromId { get { return fromId; } set { fromId = value; } }
 
-        public int ToId { get {return toId; } }
+        public int ToId { get {return toId; } set { toId = value; } }
 
-        public double Weight { get { return weight; } }
+        public double Weight { get { return weight; }  set { weight = value; } }
 
         public Boolean Active { get { return active; } set { active = value; } }
 
