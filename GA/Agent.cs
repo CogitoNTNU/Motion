@@ -22,6 +22,8 @@ namespace Motion{
             this.type = type;
         }
 
+       
+
         public int Id { get { return id; } }
 
         public double Bias { get { return bias; } }
@@ -67,6 +69,20 @@ namespace Motion{
         public EdgeChromosome[] chromosomeEdges;
         public double fitness;
         public double adjustedFitness;
+
+        public Agent() {
+            this.fitness = 0.0;
+            this.adjustedFitness = 0.0;
+        }
+
+         public NodeChromosome GetNodeChromosomeFromId(int id) {
+            foreach (var node in chromosomeNodes) {
+                if (node.Id == id) {
+                    return node;
+                }
+            }
+            return null;
+        }
 
         private static NodeChromosome[] NodeFactory(int numNodes, double bias, string activation, NodeType nodeType) {
             NodeChromosome[] chromosomeNodes = new NodeChromosome[numNodes];
@@ -134,12 +150,12 @@ namespace Motion{
 
             foreach (var node in chromosomeNodes) {
 
-                if (!nodeValues.ContainsKey(node.Id)) {
+                if (!nodeValues.ContainsKey(node.Id) && node.Active) {
                     nodeValues[node.Id] = node.Bias;
                 }
 
-                var incomingEdges = chromosomeEdges.Where(e => e.ToId == node.Id);
-                foreach (var edge in chromosomeEdges) {
+                var incomingEdges = chromosomeEdges.Where(e => e.ToId == node.Id && e.Active);
+                foreach (var edge in incomingEdges) {
                     if (nodeValues.ContainsKey(edge.FromId)) {
                         nodeValues[node.Id] += nodeValues[edge.FromId];
                     }
