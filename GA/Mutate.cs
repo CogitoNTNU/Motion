@@ -34,9 +34,12 @@ namespace Motion{
             }
         }
 
-        public static void MutateNewNode(EdgeChromosome edge, int nodeCount, int edgeCount, double mutationRate){
+        public static void MutateNewNode(EdgeChromosome edge, Agent agent, double mutationRate){
             Random Random = new Random();
             if (Random.NextDouble() < mutationRate){
+
+                int nodeCount = agent.Nodes.Length;
+                int edgeCount = agent.Edges.Length;
 
                 NodeChromosome newNode = new NodeChromosome(nodeCount, 0.5, "relu", NodeType.Hidden);
                 EdgeChromosome newEdge = new EdgeChromosome(edgeCount, newNode.Id, edge.ToId, 1);
@@ -44,7 +47,8 @@ namespace Motion{
                 edge.Weight = 1;
                 edge.ToId = newNode.Id;
 
-                //TODO: bli ferdig
+                agent.AddNode(newNode);
+                agent.AddEdge(newEdge);
 
             }
         }
