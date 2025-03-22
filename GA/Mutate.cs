@@ -36,6 +36,13 @@ namespace Motion{
             }
         }
 
+        public static void MutateActivation(NodeChromosome node, double mutationRate){
+            Random Random = new Random();
+            if (Random.NextDouble() < mutationRate){
+                // TODO: Implement activation function mutation
+            }
+        }
+
 
 
         public static void MutateEdgeWeight(EdgeChromosome edge, double mutationRate){
@@ -85,6 +92,40 @@ namespace Motion{
                 agent.AddNode(newNode);
                 agent.AddEdge(newEdge);
 
+            }
+        }
+
+        public static void SwapEdgesFromInput(Agent agent, double mutationRate){
+            Random Random = new Random();
+            if (Random.NextDouble() < mutationRate){
+                EdgeChromosome[] edges = agent.Edges;
+                EdgeChromosome[] swapCandidates = [];
+                foreach (EdgeChromosome edge in edges)
+                {
+                    // find all edges that have an input node as the from node
+                    if (agent.GetNodeChromosomeFromId(edge.FromId).Type == NodeType.Input){
+                        swapCandidates.Append(edge);
+                    } 
+                }
+                // choose two random fromIDs from the swapCandidates
+                int index1 = Random.Next(0, swapCandidates.Length);
+                int id1 = swapCandidates[index1].FromId;
+                int id2 = id1;
+                while (id2 == id1){
+                    int index2 = Random.Next(0, swapCandidates.Length);
+                    id2 = swapCandidates[index2].FromId;
+                }
+                // swap the edges
+                foreach (EdgeChromosome edge in edges)
+                {
+                    if (edge.FromId == id1){
+                        edge.FromId = id2;
+                    }
+                    else if (edge.FromId == id2){
+                        edge.FromId = id1;
+                    }
+                }
+              
             }
         }
 
