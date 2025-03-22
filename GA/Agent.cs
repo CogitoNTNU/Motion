@@ -69,32 +69,48 @@ namespace Motion{
         
         public int FromId { get { return fromId; } set { fromId = value; } }
 
-        public int ToId { get {return toId; } set { toId = value; } }
+        public int ToId { get { return toId; } set { toId = value; } }
 
         public double Weight { get { return weight; }  set { weight = value; } }
 
         public Boolean Active { get { return active; } set { active = value; } }
 
-
     }
+    
     class Agent {
-        public NodeChromosome[] chromosomeNodes;
-        public EdgeChromosome[] chromosomeEdges;
-        public double fitness;
-        public double adjustedFitness;
+        private NodeChromosome[] chromosomeNodes;
+        private EdgeChromosome[] chromosomeEdges;
+        private double fitness;
+        private double adjustedFitness;
 
         public Agent() {
             this.fitness = 0.0;
             this.adjustedFitness = 0.0;
         }
 
-         public NodeChromosome GetNodeChromosomeFromId(int id) {
+        public NodeChromosome[] Nodes { get { return chromosomeNodes; } }
+
+        public EdgeChromosome[] Edges { get { return chromosomeEdges; } }
+
+        public double Fitness { get { return fitness; } set { fitness = value; } }
+
+        public double AdjustedFitness { get { return adjustedFitness; } set { adjustedFitness = value; } }
+
+        public NodeChromosome GetNodeChromosomeFromId(int id) {
             foreach (var node in chromosomeNodes) {
                 if (node.Id == id) {
                     return node;
                 }
             }
             return null;
+        }
+
+        public void AddNode(NodeChromosome node) {
+            chromosomeNodes.Append(node);
+        }
+
+        public void AddEdge(EdgeChromosome edge) {
+            chromosomeEdges.Append(edge);
         }
 
         private static NodeChromosome[] NodeFactory(int numNodes, double bias, string activation, NodeType nodeType) {
