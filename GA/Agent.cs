@@ -15,6 +15,19 @@ namespace Motion{
         private NodeType type;
         private Boolean active = true;
 
+        /// <summary>
+        /// Creates a new NodeChromosome object.
+        /// </summary>
+        /// <param name="id">int</param>
+        /// <param name="bias">double</param>
+        /// <param name="activation">String: activation function</param>
+        /// <param name="type">NodeType: input, hidden or output</param>
+        /// <returns>
+        /// NodeChromosome
+        /// </returns>
+        /// <remarks>
+        /// Constructor for NodeChromosome
+        /// </remarks>
         public NodeChromosome(int id, double bias, String activation, NodeType type) {
             this.id = id;
             this.bias = bias;
