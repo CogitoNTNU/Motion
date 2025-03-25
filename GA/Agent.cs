@@ -52,20 +52,20 @@ namespace Motion{
     public readonly record struct EdgeChromosome1(int edge, int fromId, int toId, double weight);
 
     class EdgeChromosome {
-        private int edge;
+        private int innovationNumber;
         private int fromId;
         private int toId;
         private double weight;
         private Boolean active = true;
 
-        public EdgeChromosome(int edge, int fromId, int toId, double weight) {
-            this.edge = edge;
+        public EdgeChromosome(int innovationNumber, int fromId, int toId, double weight) {
+            this.innovationNumber = innovationNumber;
             this.fromId = fromId;
             this.toId = toId;
             this.weight = weight;
         }
 
-        public int Edge { get { return edge; } } 
+        public int InnovationNumber { get { return innovationNumber; } } 
         
         public int FromId { get { return fromId; } set { fromId = value; } }
 
