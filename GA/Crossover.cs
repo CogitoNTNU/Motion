@@ -33,8 +33,6 @@ namespace Motion{
         }
 
         public static Agent dominantCrossover(Agent parent1, Agent parent2){
-
-            // Agent child = new Agent();
             
             // Get max chromosome length
             Agent dominant = parent1.Fitness > parent2.Fitness ? parent1 : parent2;
@@ -63,10 +61,7 @@ namespace Motion{
                     addNodeToChromosome(notDominant, childChromosomeNodes, notDominant.Edges[i].FromId);
                     addNodeToChromosome(notDominant, childChromosomeNodes, notDominant.Edges[i].ToId);
                 }
-            }
-
-            // child.Nodes = childChromosomeNodes;
-            // child.Edges = childChromosomeEdges;   
+            }   
 
             Agent child = new Agent(childChromosomeNodes, childChromosomeEdges);
 
@@ -74,8 +69,6 @@ namespace Motion{
         }
 
         public static Agent DoCrossover(Agent parent1, Agent parent2){
-
-            // Agent child = new Agent();
 
             // Get max chromosome length
             Agent dominant = parent1.Fitness > parent2.Fitness ? parent1 : parent2;
@@ -122,12 +115,10 @@ namespace Motion{
                 
             }
 
-            // child.Nodes = childChromosomeNodes;
-            // child.Edges = childChromosomeEdges;  
-
             Agent child = new Agent(childChromosomeNodes, childChromosomeEdges); 
 
             return child;
+            
         }
 
         
