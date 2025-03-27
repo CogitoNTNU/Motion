@@ -13,62 +13,53 @@ namespace Motion
 {
     class GymRunner
     {
-
         // Hyperparameters for training
         static double epsilon = 1.0;
         static double epsilonDecay = 0.995;
         static double epsilonMin = 0.01;
-        static double gamma = 0.99; // Discount factor
-        static int batchSize = 32;  // For mini-batch training
+        static double gamma = 0.99;
+        static int batchSize = 32;
+
         public static void RunGymEnvironment()
         {
-            CartPoleEnv cp = new CartPoleEnv(AvaloniaEnvViewer.Factory); 
+            CartPoleEnv cp = new CartPoleEnv(AvaloniaEnvViewer.Factory);
             PopulationManager popManager = new PopulationManager();
+
             var model = new DQNModel(4, 2);
+            var agent = new Agent(4, 2);
+            var optimizer = torch.optim.Adam(model.parameters(), lr: 0.001);
 
-            NDArray state = cp.Reset(); // Get initial state
+            NDArray state = cp.Reset();
 
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 1000; i++)
             {
-                Console.WriteLine("Step: " + i);
-
                 double[] stateArray = state.ToArray<double>();
-                Tensor stateTensor = torch.tensor(stateArray).unsqueeze(0);
+                Tensor stateTensor = torch.tensor(stateArray).unsqueeze(0); // Shape [1,4]
 
-                int action;
-                if (new Random().NextDouble() < epsilon)
-                {
-                    action = new Random().Next(0, 2);
-                }
-                else 
-                {
-                    using (var noGrad = torch.no_grad())
-                    {
-                        Tensor qValues = model.forward(stateTensor);
-                        action = qValues.argmax().item<int>();
-                    }
-                }
+                // ε-greedy action selection
+                var action = agent.SelectAction(stateTensor);
 
-                var (nextState, reward, _done, information) = cp.Step(action);
+                var (nextState, reward, done, info) = cp.Step(action);
 
-                popManager.AddExperience(state, action, reward, nextState, _done);
+                popManager.AddExperience(state, action, reward, nextState, done);
 
                 state = nextState;
 
-                Dispatcher.UIThread.Post(() =>
+                Dispatcher.UIThread.Post(() => 
                 {
-                    Image img = cp.Render(); 
+                    Image img = cp.Render();
                 });
 
                 Thread.Sleep(15);
 
-                if (_done)
+                if (done)
                 {
                     state = cp.Reset();
-
-                    epsilon = Math.Max(epsilon * epsilonDecay, epsilonMin);
+                    agent.UpdateEpsilon(epsilonDecay, epsilonMin);
                 }
             }
+
+            // Save the collected experience data
             popManager.SaveToFile("/Users/edvard/Git/Motion/RL/populationData.json");
         }
     }
