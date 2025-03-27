@@ -38,6 +38,13 @@ namespace Motion{
             int disjointEdges = 0;
             foreach (var edge in edges1) {
                 if (edge.InnovationNumber < innovationRange.Item1 || edge.InnovationNumber > innovationRange.Item2) {
+                    continue;
+                }
+                
+                foreach (var edge2 in edges2) {
+                    if (edge.InnovationNumber == edge2.InnovationNumber) {
+                        break;
+                    }
                     disjointEdges++;
                 }
             }   
@@ -46,6 +53,11 @@ namespace Motion{
         
         public static int GetNumberOFExcessEdges(EdgeChromosome[] edges1, EdgeChromosome[] edges2, (int,int) innovationRange) {
             int excessEdges = 0;
+            foreach (var edge in edges1) {
+                if (edge.InnovationNumber < innovationRange.Item1 || edge.InnovationNumber > innovationRange.Item2) {
+                    excessEdges++;
+                }
+            }
             foreach (var edge in edges2) {
                 if (edge.InnovationNumber < innovationRange.Item1 || edge.InnovationNumber > innovationRange.Item2) {
                     excessEdges++;
@@ -78,78 +90,6 @@ namespace Motion{
                 agent.AdjustedFitness = 0;
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         public static double Distance(Agent agent1, Agent agent2){
