@@ -2,9 +2,9 @@ using JetBrains.Annotations;
 
 namespace Motion{
 
-    class Innovation {
+    class Innovation { // Singleton class
 
-        private Innovation() { }
+        private Innovation() { } 
 
         private static Innovation? _instance;
 
