@@ -2,6 +2,38 @@ using JetBrains.Annotations;
 
 namespace Motion{
 
+    class Innovation {
+
+        private Innovation() { }
+
+        private static Innovation? _instance;
+
+        private Dictionary<Tuple<int, int>, int> dict = new Dictionary<Tuple<int, int>, int>();
+
+        public static Innovation GetInstance()
+        {
+            if (_instance == null)
+            {
+                _instance = new Innovation();
+            }
+            return _instance;
+        }
+
+        public int GetInnovationNumber(int to, int from) {
+            Tuple<int, int> tuple = new Tuple<int, int>(to, from);
+
+            if (dict.ContainsKey(tuple)) {
+                return dict[tuple];
+            }
+
+            int index = dict.Count + 1;
+            dict.Add(tuple, index);
+            return index;
+        }
+    }
+
+    
+
     enum NodeType {
         Input,
         Output,
@@ -153,7 +185,14 @@ namespace Motion{
                 for (int node = 0; node < numNodes; node++) {
 
                     for (int nextLayerNode = 0; nextLayerNode < numNodesNextLayer; nextLayerNode++)
-                        chromosomeEdges.Append(new EdgeChromosome(chromosomeEdges.Length, currentNodeId, nextNodeId+nextLayerNode, 0.5));
+                        chromosomeEdges.Append(
+                            new EdgeChromosome(
+                                Innovation.GetInstance().GetInnovationNumber(currentNodeId, nextNodeId+nextLayerNode), 
+                                currentNodeId, 
+                                nextNodeId+nextLayerNode, 
+                                0.5
+                                )
+                            );
         
                     currentNodeId ++;
                 }
