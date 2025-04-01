@@ -122,6 +122,77 @@ namespace Motion{
         }
 
 
+
+        public static List<List<Agent>> Speciate(Agent[] population, double distanceThreshold) {
+            List<List<Agent>> species = new List<List<Agent>>(); 
+
+            foreach (Agent agent in population) {
+                bool foundSpecies = false;
+                foreach (List<Agent> specie in species) {
+                    // Compare with the representative (first member) of the species.
+                    if (Distance(agent, specie[0]) < distanceThreshold) {
+                        specie.Add(agent);
+                        foundSpecies = true;
+                        break;
+                    }
+                }
+                if (!foundSpecies) {
+                    // Create a new species if no match was found.
+                    species.Add(new List<Agent> { agent });
+                }
+            }
+
+            return species;
+        }
+
+        public static void FitnessSharingWithoutSpecies(Agent[] population, double c1, double c2, double c3, double deltaT)
+        {
+            // Iterate over each agent in the population.
+            for (int i = 0; i < population.Length; i++)
+            {
+                double sharingSum = 0.0;
+
+                // Compare the current agent with every other agent.
+                for (int j = 0; j < population.Length; j++)
+                {
+                    double distance = Distance(population[i], population[j]);
+                    if (distance < deltaT)
+                    {
+                        // The sharing function decays linearly with the distance.
+                        sharingSum += 1.0 - (distance / deltaT);
+                    }
+                }
+
+                // Adjust the fitness by dividing the raw fitness by the sharing sum.
+                // If sharingSum is 0 (to avoid division by zero), leave the fitness unchanged.
+                if (sharingSum > 0)
+                {
+                    population[i].AdjustedFitness = population[i].Fitness / sharingSum;
+                }
+                else
+                {
+                    population[i].AdjustedFitness = population[i].Fitness;
+                }
+            }
+        }
+
+        public static void AdjustFitnessAcrossSpecies(List<List<Agent>> species) {
+            foreach (List<Agent> specie in species) {
+                int speciesCount = specie.Count;
+                foreach (Agent agent in specie) {
+                    agent.AdjustedFitness = agent.Fitness / speciesCount;
+                }
+            }
+        }
+
+        public static void SpeciateAndFitnessSharing(Agent[] population, double distanceThreshold, double c1, double c2, double c3, double deltaT) {
+            List<List<Agent>> species = Speciate(population, distanceThreshold);
+            AdjustFitnessAcrossSpecies(species);
+        }
+    
+
+
+
     }
 
 }
