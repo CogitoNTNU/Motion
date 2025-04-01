@@ -34,7 +34,7 @@ namespace Motion{
             
         }
 
-        public static int GetNumberOFDisjointEdges(EdgeChromosome[] edges1, EdgeChromosome[] edges2, (int, int) innovationRange) {
+        public static int GetNumberOfDisjointEdges(EdgeChromosome[] edges1, EdgeChromosome[] edges2, (int, int) innovationRange) {
             int disjointEdges = 0;
             foreach (var edge in edges1) {
                 if (edge.InnovationNumber < innovationRange.Item1 || edge.InnovationNumber > innovationRange.Item2) {
@@ -67,13 +67,6 @@ namespace Motion{
         }
 
 
-        public static void AdjustedFitness(Agent[] population){
-            foreach (Agent agent in population) {
-
-
-                agent.AdjustedFitness = 0;
-            }
-        }
 
 
         public static double Distance(Agent agent1, Agent agent2){
@@ -86,7 +79,7 @@ namespace Motion{
             double C2 = 0.8;
             double C3 = 0.3;
 
-            int N = Math.Max(edges1.Length, edges2.Length);
+            double N = Math.Max(edges1.Length, edges2.Length);
             double W = 0;
 
             foreach (EdgeChromosome edge1 in edges1) {
@@ -98,8 +91,8 @@ namespace Motion{
             }
             
             (int, int) innovationRange = GetInnovationRange(agent1, agent2);
-            int D = GetNumberOFDisjointEdges(edges1, edges2, innovationRange);
-            double E = GetNumberOFExcessEdges(edges1, edges2, innovationRange);
+            int D = GetNumberOfDisjointEdges(edges1, edges2, innovationRange);
+            int E = GetNumberOFExcessEdges(edges1, edges2, innovationRange);
 
             return (C1 * E / N ) + (C2 * D / N) + C3 * W;
             
@@ -160,7 +153,7 @@ namespace Motion{
             }
         }
 
-        public static void AdjustFitnessAcrossSpecies(List<List<Agent>> species) {
+        public static void FitnessSharingAcrossSpecies(List<List<Agent>> species) {
             foreach (List<Agent> specie in species) {
                 int speciesCount = specie.Count;
                 foreach (Agent agent in specie) {
@@ -169,13 +162,11 @@ namespace Motion{
             }
         }
 
-        public static void SpeciateAndFitnessSharing(Agent[] population, double distanceThreshold, double c1, double c2, double c3, double deltaT) {
+        public static List<List<Agent>> SpeciateAndFitnessSharing(Agent[] population, double distanceThreshold, double c1, double c2, double c3, double deltaT) {
             List<List<Agent>> species = Speciate(population, distanceThreshold);
-            AdjustFitnessAcrossSpecies(species);
+            FitnessSharingAcrossSpecies(species);
+            return species;
         }
-    
-
-
 
     }
 
