@@ -7,7 +7,9 @@ namespace Motion
     {
         static void Main(string[] args)
         {
-            GymRunner.RunGymEnvironment();
+            // GymRunner.RunGymEnvironment();
+            MyRLExperiment experiment = new MyRLExperiment();
+            experiment.RunPPO(useCuda: false); 
         }
     }
 }
