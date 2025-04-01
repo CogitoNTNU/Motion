@@ -66,22 +66,6 @@ namespace Motion{
             return excessEdges;           
         }
 
-    // THIS WONT WORK, NEED TO REFACTOR
-        // public static List<Agent[]> Speciate(Agent[] population, double distanceThreshold) {
-        //     var species = new List<Agent[]>();
-        //     foreach (Agent agent in population) {
-        //         var specie = new List<Agent>();
-        //         foreach (Agent agent2 in population) {
-        //             double distance = Distance(agent, agent2);
-        //             if (distance < distanceThreshold && distance > 0 && specie.Contains(agent2) == false) {
-        //                 specie.Add(agent2);
-        //             }
-        //         }
-        //     }
-        //     return species;
-
-        // }
-
 
         public static void AdjustedFitness(Agent[] population){
             foreach (Agent agent in population) {
