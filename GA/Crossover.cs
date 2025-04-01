@@ -119,11 +119,42 @@ namespace Motion{
 
             return child;
             
-        }
+        } 
 
         
 
+        public static Agent newCrossover(Agent parent1, Agent parent2){
+            
+            Agent dominant = parent1.AdjustedFitness > parent2.AdjustedFitness ? parent1 : parent2;
+            Agent notDominant = parent1.AdjustedFitness > parent2.AdjustedFitness ? parent2 : parent1;
+            
+            EdgeChromosome[] childChromosomeEdges = new EdgeChromosome[0];
+            
+            EdgeChromosome[] dominantEdges  = dominant.Edges;
+            EdgeChromosome[] nonDominantEdges  = notDominant.Edges;
 
+            double fitnessSum = parent1.AdjustedFitness + parent2.AdjustedFitness;
+            double probabilityFromParent1 = parent1.AdjustedFitness / fitnessSum;
+
+            Random rand = new Random();
+
+            foreach (EdgeChromosome edge1 in dominantEdges) {
+                foreach (EdgeChromosome edge2 in nonDominantEdges) {
+                    if (edge1.InnovationNumber == edge2.InnovationNumber) {
+                        
+                        EdgeChromosome chosenEdge = rand.NextDouble() < probabilityFromParent1 ? edge1 : edge2;
+                        childChromosomeEdges.Append(chosenEdge);
+                        break;
+        
+                    }
+                }
+            }
+            
+            // TODO: add disjoint and excess genes to the child
+
+
+            return child;
+        }
 
     }
 
