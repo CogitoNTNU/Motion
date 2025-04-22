@@ -187,7 +187,7 @@ namespace Motion{
                     for (int nextLayerNode = 0; nextLayerNode < numNodesNextLayer; nextLayerNode++)
                         chromosomeEdges.Append(
                             new EdgeChromosome(
-                                Innovation.GetInstance().GetInnovationNumber(nextNodeId + nextLayerNode, currentNodeId), 
+                                Innovation.GetInstance().GetInnovationNumber( currentNodeId, nextNodeId + nextLayerNode), 
                                 currentNodeId, 
                                 nextNodeId+nextLayerNode, 
                                 0.5
@@ -257,7 +257,7 @@ namespace Motion{
                 var incomingEdges = chromosomeEdges.Where(e => e.ToId == node.Id && e.Active);
                 foreach (var edge in incomingEdges) {
                     if (nodeValues.ContainsKey(edge.FromId)) {
-                        nodeValues[node.Id] += nodeValues[edge.FromId];
+                        nodeValues[node.Id] += nodeValues[edge.FromId]*edge.Weight;
                     }
                 }
 

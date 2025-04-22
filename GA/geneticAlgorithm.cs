@@ -43,6 +43,12 @@ namespace Motion{
                 {
                     var (observation, reward, _done, information) = cp.Step((Int32)action); // switching between left and right
                     action = agent.ForwardPass(observation)[0]; // switching between left and right
+                    Console.WriteLine($"Action: {action}");
+                    if (action > 0.001){
+                        action = 1;
+                    }else{
+                        action = 0;
+                    }
                     done = _done;
                     // Do something with the reward and observation.
                     total_rerward += reward;

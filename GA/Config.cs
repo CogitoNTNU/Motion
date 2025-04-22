@@ -15,11 +15,11 @@ namespace Motion
         public double EdgeWeightSetMutation = 0.1;
         public double ToggleEdgeActiveMutation = 0.02;
 
-        public double AddNodeMutation = 0.03;
-        public double AddEdgeMutation = 0.05; // you can implement this later
+        public double AddNodeMutation = 0.06;
+        public double AddEdgeMutation = 0.1; // you can implement this later
         public double SwapInputEdges = 0.01;
         private double crossoverRate = 0.8;
-        private int elitismCount = 2;
+        private int elitismCount = 20;
         private int chromosomeSize = 10;
         
         private Config() { 
