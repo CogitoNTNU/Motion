@@ -5,8 +5,19 @@ namespace Motion
         // singleton constructor
         private static Config instance = null;
         private int populationSize = 50;
-        private int maxGenerations = 100;
-        private double mutationRate = 0.01;
+        private int numGenerations = 100;
+
+        public double NodeBiasMutation = 0.8;
+        public double NodeBiasSetMutation = 0.1;
+        public double ActivationMutation = 0.05;
+
+        public double EdgeWeightMutation = 0.8;
+        public double EdgeWeightSetMutation = 0.1;
+        public double ToggleEdgeActiveMutation = 0.02;
+
+        public double AddNodeMutation = 0.03;
+        public double AddEdgeMutation = 0.05; // you can implement this later
+        public double SwapInputEdges = 0.01;
         private double crossoverRate = 0.8;
         private int elitismCount = 2;
         private int chromosomeSize = 10;
@@ -31,17 +42,14 @@ namespace Motion
             set { populationSize = value; }
         }
 
-        public int MaxGenerations
+        public int NumGenerations
         {
-            get { return maxGenerations; }
-            set { maxGenerations = value; }
+            get { return numGenerations; }
+            set { numGenerations = value; }
         }
 
-        public double MutationRate
-        {
-            get { return mutationRate; }
-            set { mutationRate = value; }
-        }
+       
+       
 
         public double CrossoverRate
         {
