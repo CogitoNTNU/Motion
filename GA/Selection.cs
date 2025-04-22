@@ -36,12 +36,12 @@ namespace Motion{
         }
 
 
-        public static (Agent, Agent) RouletteWheelSelection(Agent[] population){
+        public static (Agent, Agent) RouletteWheelSelection(List<Agent> population){
 
             Random Random = new Random();
             
-            double[] probabilities = new double[population.Length];
-            for (int i = 0; i < population.Length; i++)
+            double[] probabilities = new double[population.Count];
+            for (int i = 0; i < population.Count; i++)
             {
                 probabilities[i] = population[i].AdjustedFitness;
             }
@@ -78,7 +78,7 @@ namespace Motion{
             return (parent1, parent2);
         }    
         
-        public static (Agent, Agent) TournamentSelection(Agent[] population, int tournamentSize)
+        public static (Agent, Agent) TournamentSelection(List<Agent> population, int tournamentSize)
         {
             Random random = new Random();
             Agent parent1 = SelectTournamentWinner(population, tournamentSize, random);
@@ -86,15 +86,15 @@ namespace Motion{
             return (parent1, parent2);
         }
 
-        private static Agent SelectTournamentWinner(Agent[] population, int tournamentSize, Random random)
+        private static Agent SelectTournamentWinner(List<Agent> population, int tournamentSize, Random random)
         {
             // Start by selecting a random agent as the best candidate.
-            Agent best = population[random.Next(population.Length)];
+            Agent best = population[random.Next(population.Count)];
             
             // Iterate the remaining tournamentSize - 1 selections.
             for (int i = 1; i < tournamentSize; i++)
             {
-                Agent candidate = population[random.Next(population.Length)];
+                Agent candidate = population[random.Next(population.Count)];
                 if (candidate.AdjustedFitness > best.AdjustedFitness)
                 {
                     best = candidate;
