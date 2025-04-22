@@ -32,7 +32,7 @@ namespace Motion{
             float total_rerward = 0;
             var action = 0.0; 
             
-            for (int i = 0; i < 100_000; i++)
+            for (int i = 0; i < 100; i++)
             {
                 if (done)
                 {
@@ -46,6 +46,7 @@ namespace Motion{
                     done = _done;
                     // Do something with the reward and observation.
                     total_rerward += reward;
+                    //Console.WriteLine(observation.ToString());
                     
                 }
 
@@ -59,7 +60,7 @@ namespace Motion{
             Agent[] population = new Agent[config.PopulationSize];
             for (int i = 0; i < config.PopulationSize; i++)
             {
-                population[i] = Agent.InitializeAgent(2, 47, 1);    // must add up to population-size
+                population[i] = Agent.InitializeAgent(4, 1, 5);    // must add up to population-size
             }
             return population;
         }
@@ -96,7 +97,7 @@ namespace Motion{
 
                     while (offspringCount-- > 0)
                     {
-                        var (parent1, parent2) = Selection.TournamentSelection(specie, 3); // species level selection
+                        var (parent1, parent2) = Selection.RouletteWheelSelection(specie); // species level selection
                         Agent child = Crossover.ApplyCrossover(parent1, parent2);
                         Mutate.ApplyMutations(child); // implement this yourself
                         nextGeneration.Add(child);

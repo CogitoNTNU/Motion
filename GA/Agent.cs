@@ -110,8 +110,8 @@ namespace Motion{
     }
     
     class Agent {
-        private NodeChromosome[] chromosomeNodes;
-        private EdgeChromosome[] chromosomeEdges;
+        private List<NodeChromosome> chromosomeNodes = new();
+        private List<EdgeChromosome> chromosomeEdges = new();
         private double fitness;
         private double adjustedFitness;
 
@@ -120,9 +120,9 @@ namespace Motion{
             this.adjustedFitness = 0.0;
         }
 
-        public NodeChromosome[] Nodes { get { return chromosomeNodes; } }
+        public List<NodeChromosome> Nodes { get { return chromosomeNodes; } }
 
-        public EdgeChromosome[] Edges { get { return chromosomeEdges; } }
+        public List<EdgeChromosome> Edges { get { return chromosomeEdges; } }
 
         public double Fitness { get { return fitness; } set { fitness = value; } }
 
@@ -138,17 +138,17 @@ namespace Motion{
         }
 
         public void AddNode(NodeChromosome node) {
-            chromosomeNodes.Append(node);
+            chromosomeNodes.Add(node);
         }
 
         public void AddEdge(EdgeChromosome edge) {
-            chromosomeEdges.Append(edge);
+            chromosomeEdges.Add(edge);
         }
 
-        private static NodeChromosome[] NodeFactory(int numNodes, double bias, string activation, NodeType nodeType) {
-            NodeChromosome[] chromosomeNodes = new NodeChromosome[numNodes];
+        private static List<NodeChromosome> NodeFactory(int numNodes, double bias, string activation, NodeType nodeType) {
+            List<NodeChromosome> chromosomeNodes = new List<NodeChromosome>();
             for (int i = 0; i < numNodes; i++) {
-                chromosomeNodes[i] = new NodeChromosome(i, bias, activation, nodeType);
+                chromosomeNodes.Add(new NodeChromosome(i, bias, activation, nodeType));
             }
             return chromosomeNodes;
         }
@@ -156,13 +156,13 @@ namespace Motion{
         // TODO: implement strategy pattern for Agent
         public static Agent InitializeAgent(int inputs, int outputs, int initialHidden) {
 
-            EdgeChromosome[] chromosomeEdges = new EdgeChromosome[0];
+            List<EdgeChromosome> chromosomeEdges = new List<EdgeChromosome>(0); // initialize empty list of edges
             // nodes and edges are initialized here
-            NodeChromosome[] inputChromosomeNodes = NodeFactory(inputs, 0.0, "relu", NodeType.Input); //TODO: remove relu
-            NodeChromosome[] hiddenChromosomeNodes = NodeFactory(initialHidden, 0.5, "relu", NodeType.Hidden);
-            NodeChromosome[] outputChromosomeNodes = NodeFactory(outputs, 0.5, "relu", NodeType.Output);
+            List<NodeChromosome> inputChromosomeNodes = NodeFactory(inputs, 0.0, "relu", NodeType.Input); //TODO: remove relu
+            List<NodeChromosome> hiddenChromosomeNodes = NodeFactory(initialHidden, 0.5, "relu", NodeType.Hidden);
+            List<NodeChromosome> outputChromosomeNodes = NodeFactory(outputs, 0.5, "relu", NodeType.Output);
 
-            NodeChromosome[] chromosomeNodes = inputChromosomeNodes.Concat(hiddenChromosomeNodes.Concat(outputChromosomeNodes).ToArray()).ToArray();
+            List<NodeChromosome> chromosomeNodes = inputChromosomeNodes.Concat([.. hiddenChromosomeNodes, .. outputChromosomeNodes]).ToList();
 
             int currentNodeId = 0;
             int nextNodeId = 0;
@@ -187,7 +187,7 @@ namespace Motion{
                     for (int nextLayerNode = 0; nextLayerNode < numNodesNextLayer; nextLayerNode++)
                         chromosomeEdges.Append(
                             new EdgeChromosome(
-                                Innovation.GetInstance().GetInnovationNumber(currentNodeId, nextNodeId+nextLayerNode), 
+                                Innovation.GetInstance().GetInnovationNumber(nextNodeId + nextLayerNode, currentNodeId), 
                                 currentNodeId, 
                                 nextNodeId+nextLayerNode, 
                                 0.5
@@ -201,12 +201,44 @@ namespace Motion{
             return new Agent(chromosomeNodes, chromosomeEdges);
         }
 
-        public Agent(NodeChromosome[] chromosomeNodes, EdgeChromosome[] chromosomeEdges){
+        public Agent(List<NodeChromosome> chromosomeNodes, List<EdgeChromosome> chromosomeEdges){
             this.chromosomeNodes = chromosomeNodes;
             this.chromosomeEdges = chromosomeEdges;
             this.fitness = 0.0;
             this.adjustedFitness = 0.0;
         } 
+
+        private List<NodeChromosome> TopologicalSort()
+        {
+            var graph = chromosomeEdges
+                .Where(e => e.Active)
+                .GroupBy(e => e.FromId)
+                .ToDictionary(g => g.Key, g => g.Select(e => e.ToId).ToList());
+
+            var visited = new HashSet<int>();
+            var sorted = new List<NodeChromosome>();
+
+            void Visit(int nodeId)
+            {
+                if (visited.Contains(nodeId)) return;
+                visited.Add(nodeId);
+
+                if (graph.ContainsKey(nodeId))
+                    foreach (int to in graph[nodeId]) Visit(to);
+
+                var node = GetNodeChromosomeFromId(nodeId);
+                if (node != null)
+                    sorted.Add(node);
+            }
+
+            foreach (var node in chromosomeNodes.Where(n => n.Type == NodeType.Input))
+            {
+                Visit(node.Id);
+            }
+
+            return sorted.DistinctBy(n => n.Id).ToList();
+        }
+
 
         public double[] ForwardPass(NumSharp.NDArray inputs) {
 
@@ -216,7 +248,7 @@ namespace Motion{
                 nodeValues[chromosomeNodes[i].Id] = inputs[i];
             }
 
-            foreach (var node in chromosomeNodes) {
+            foreach (var node in TopologicalSort()) {
 
                 if (!nodeValues.ContainsKey(node.Id) && node.Active) {
                     nodeValues[node.Id] = node.Bias;

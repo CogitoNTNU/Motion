@@ -3,7 +3,7 @@ namespace Motion{
 
     class Speciation{
 
-        public static (int, int) GetMinMaxInnovationNumber(EdgeChromosome[] edges) {
+        public static (int, int) GetMinMaxInnovationNumber(List<EdgeChromosome> edges) {
             
             int min = int.MaxValue;
             int max = int.MinValue;
@@ -21,8 +21,8 @@ namespace Motion{
             int start = int.MaxValue;
             int end = int.MinValue;
 
-            EdgeChromosome[] edges1 = agent1.Edges;
-            EdgeChromosome[] edges2 = agent2.Edges;
+            List<EdgeChromosome> edges1 = agent1.Edges;
+            List<EdgeChromosome> edges2 = agent2.Edges;
 
             (int, int) range1 =  GetMinMaxInnovationNumber(edges1);
             (int, int) range2 = GetMinMaxInnovationNumber(edges2);
@@ -51,7 +51,7 @@ namespace Motion{
         //     return disjointEdges;           
         // }
 
-        public static int GetNumberOfDisjointEdges(EdgeChromosome[] edges1, EdgeChromosome[] edges2, (int, int) innovationRange)
+        public static int GetNumberOfDisjointEdges(List<EdgeChromosome> edges1, List<EdgeChromosome> edges2, (int, int) innovationRange)
         {
             var set2 = new HashSet<int>(edges2.Select(e => e.InnovationNumber));
             int disjointEdges = 0;
@@ -68,7 +68,7 @@ namespace Motion{
         }
 
         
-        public static int GetNumberOFExcessEdges(EdgeChromosome[] edges1, EdgeChromosome[] edges2, (int,int) innovationRange) {
+        public static int GetNumberOFExcessEdges(List<EdgeChromosome> edges1, List<EdgeChromosome> edges2, (int,int) innovationRange) {
             int excessEdges = 0;
             foreach (var edge in edges1) {
                 if (edge.InnovationNumber < innovationRange.Item1 || edge.InnovationNumber > innovationRange.Item2) {
@@ -87,16 +87,16 @@ namespace Motion{
 
 
         public static double Distance(Agent agent1, Agent agent2){
-            EdgeChromosome[] edges1 = agent1.Edges;
-            EdgeChromosome[] edges2 = agent2.Edges;
-            NodeChromosome[] nodes1 = agent1.Nodes;
-            NodeChromosome[] nodes2 = agent2.Nodes;
+            List<EdgeChromosome> edges1 = agent1.Edges;
+            List<EdgeChromosome> edges2 = agent2.Edges;
+            List<NodeChromosome> nodes1 = agent1.Nodes;
+            List<NodeChromosome> nodes2 = agent2.Nodes;
 
             double C1 = 1.0;
             double C2 = 0.8;
             double C3 = 0.3;
 
-            double N = Math.Max(edges1.Length, edges2.Length);
+            double N = Math.Max(edges1.Count, edges2.Count);
             double W = 0;
             int matching = 0;
             foreach (EdgeChromosome edge1 in edges1) {

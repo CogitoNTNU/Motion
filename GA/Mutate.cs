@@ -80,8 +80,8 @@ namespace Motion{
             Random Random = new Random();
             if (Random.NextDouble() < mutationRate){
 
-                int nodeCount = agent.Nodes.Length;
-                int edgeCount = agent.Edges.Length;
+                int nodeCount = agent.Nodes.Count;
+                int edgeCount = agent.Edges.Count;
 
                 NodeChromosome newNode = new NodeChromosome(nodeCount, 0.5, "relu", NodeType.Hidden);
                 EdgeChromosome newEdge = new EdgeChromosome(edgeCount, newNode.Id, edge.ToId, 1);
@@ -98,8 +98,8 @@ namespace Motion{
         public static void SwapEdgesFromInput(Agent agent, double mutationRate){
             Random Random = new Random();
             if (Random.NextDouble() < mutationRate){
-                EdgeChromosome[] edges = agent.Edges;
-                EdgeChromosome[] swapCandidates = [];
+                List<EdgeChromosome> edges = agent.Edges;
+                List<EdgeChromosome> swapCandidates = new List<EdgeChromosome>();
                 foreach (EdgeChromosome edge in edges)
                 {
                     // find all edges that have an input node as the from node
@@ -108,11 +108,11 @@ namespace Motion{
                     } 
                 }
                 // choose two random fromIDs from the swapCandidates
-                int index1 = Random.Next(0, swapCandidates.Length);
+                int index1 = Random.Next(0, swapCandidates.Count);
                 int id1 = swapCandidates[index1].FromId;
                 int id2 = id1;
                 while (id2 == id1){
-                    int index2 = Random.Next(0, swapCandidates.Length);
+                    int index2 = Random.Next(0, swapCandidates.Count);
                     id2 = swapCandidates[index2].FromId;
                 }
                 // swap the edges

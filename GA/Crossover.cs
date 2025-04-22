@@ -1,7 +1,7 @@
 namespace Motion{
 
     class Crossover{
-        public static bool IsNotEdgeInChromosome(EdgeChromosome edge, EdgeChromosome[] chromosomeEdges){
+        public static bool IsNotEdgeInChromosome(EdgeChromosome edge, List<EdgeChromosome> chromosomeEdges){
             foreach (EdgeChromosome chromosomeEdge in chromosomeEdges)
             {
                 if (edge.FromId == chromosomeEdge.FromId && edge.ToId == chromosomeEdge.ToId)
@@ -12,7 +12,7 @@ namespace Motion{
             return true;
         }
 
-        public static bool IsNotNodeInChromosome(NodeChromosome node, NodeChromosome[] chromosomeNodes){
+        public static bool IsNotNodeInChromosome(NodeChromosome node, List<NodeChromosome> chromosomeNodes){
             foreach (NodeChromosome chromosomeNode in chromosomeNodes)
             {
                 if (node.Id == chromosomeNode.Id)
@@ -23,8 +23,8 @@ namespace Motion{
             return true;
         }
     
-        public static void addNodeToChromosome(Agent parent, NodeChromosome[] childChromosomeNodes, int nodeId){
-            int edgeChromosomeLength = parent.Edges.Length;
+        public static void addNodeToChromosome(Agent parent, List<NodeChromosome> childChromosomeNodes, int nodeId){
+            int edgeChromosomeLength = parent.Edges.Count;
 
             NodeChromosome node = parent.GetNodeChromosomeFromId(nodeId);
             if (node != null && IsNotNodeInChromosome(node, childChromosomeNodes)){
@@ -37,16 +37,17 @@ namespace Motion{
             // Get max chromosome length
             Agent dominant = parent1.Fitness > parent2.Fitness ? parent1 : parent2;
             Agent notDominant = parent1.Fitness > parent2.Fitness ? parent2 : parent1;
-            int edgeChromosomeLength = dominant.Edges.Length > notDominant.Edges.Length ? dominant.Edges.Length : notDominant.Edges.Length;
+            int edgeChromosomeLength = dominant.Edges.Count > notDominant.Edges.Count ? dominant.Edges.Count : notDominant.Edges.Count;
 
             // Crossover nodes
-            NodeChromosome[] childChromosomeNodes = new NodeChromosome[0];
-            EdgeChromosome[] childChromosomeEdges = new EdgeChromosome[0];
+          
+            List<NodeChromosome> childChromosomeNodes = new List<NodeChromosome>();
+            List<EdgeChromosome> childChromosomeEdges = new List<EdgeChromosome>();
 
             int index = 0;
 
             for (int i = 0; i < edgeChromosomeLength; i++ ){
-                if (IsNotEdgeInChromosome(dominant.Edges[i], childChromosomeEdges) && i < dominant.Edges.Length){
+                if (IsNotEdgeInChromosome(dominant.Edges[i], childChromosomeEdges) && i < dominant.Edges.Count){
                     childChromosomeEdges.Append(new EdgeChromosome(index, dominant.Edges[i].FromId, dominant.Edges[i].ToId, dominant.Edges[i].Weight));
                     index++;
             
@@ -54,7 +55,7 @@ namespace Motion{
                     addNodeToChromosome(dominant, childChromosomeNodes, dominant.Edges[i].ToId);
                     
 
-                }else if (IsNotEdgeInChromosome(notDominant.Edges[i], childChromosomeEdges) && i < notDominant.Edges.Length){
+                }else if (IsNotEdgeInChromosome(notDominant.Edges[i], childChromosomeEdges) && i < notDominant.Edges.Count){
                     childChromosomeEdges.Append(new EdgeChromosome(index, notDominant.Edges[i].FromId, notDominant.Edges[i].ToId, notDominant.Edges[i].Weight));
                     index++;
 
@@ -127,7 +128,7 @@ namespace Motion{
                     Active = n.Active
                 }).ToArray();
 
-            return new Agent(childNodes, childEdges.ToArray());
+            return new Agent(childNodes.ToList(), childEdges.ToList());
         }
 
     }
