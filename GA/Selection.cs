@@ -40,7 +40,7 @@ namespace Motion{
 
             Random Random = new Random();
             
-            double[] probabilities = new double[population.Length];
+            double[] probabilities = new double[population.Count];
             for (int i = 0; i < population.Count; i++)
             {
                 probabilities[i] = population[i].AdjustedFitness;
