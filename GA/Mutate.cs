@@ -130,6 +130,61 @@ namespace Motion{
         }
 
 
+        public static void AddEdgeMutation(Agent agent, double mutationRate)
+        {
+            Random random = new Random();
+
+            if (random.NextDouble() >= mutationRate)
+                return;
+
+            var nodes = agent.Nodes;
+            var edges = agent.Edges;
+
+            var nodeList = nodes.Where(n => n.Type != NodeType.Output).ToList();
+            var targetList = nodes.Where(n => n.Type != NodeType.Input).ToList();
+
+            if (nodeList.Count == 0 || targetList.Count == 0)
+                return;
+
+            var fromNode = nodeList[random.Next(nodeList.Count)];
+            var toNode = targetList[random.Next(targetList.Count)];
+
+            // prevent loops and duplicate connections
+            if (fromNode.Id == toNode.Id || edges.Any(e => e.FromId == fromNode.Id && e.ToId == toNode.Id))
+                return;
+
+            int innovation = Innovation.GetInstance().GetInnovationNumber(fromNode.Id, toNode.Id);
+            var newEdge = new EdgeChromosome(innovation, fromNode.Id, toNode.Id, Clamp(random.NextDouble() * 2 - 1));
+            agent.AddEdge(newEdge);
+        }
+
+
+
+        public static void ApplyMutations(Agent agent)
+        {
+            Random random = new Random();
+
+            foreach (var node in agent.Nodes)
+            {
+                MutateNodeBias(node, Config.Instance().NodeBiasMutation);
+                MutateSetNodeBias(node, Config.Instance().NodeBiasSetMutation);
+                MutateActivation(node, Config.Instance().ActivationMutation);
+            }
+
+            foreach (var edge in agent.Edges)
+            {
+                MutateEdgeWeight(edge, Config.Instance().EdgeWeightMutation);
+                MutateSetEdgeWeight(edge, Config.Instance().EdgeWeightSetMutation);
+                MutateEdgeActiveStatus(edge, Config.Instance().ToggleEdgeActiveMutation);
+                MutateNewNode(edge, agent, Config.Instance().AddNodeMutation);
+            }
+
+            AddEdgeMutation(agent, Config.Instance().AddEdgeMutation);
+            SwapEdgesFromInput(agent, Config.Instance().SwapInputEdges);
+        }
+
+
+
     
     }
 
