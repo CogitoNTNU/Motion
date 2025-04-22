@@ -68,7 +68,7 @@ namespace Motion{
             return child;
         }
 
-        public static Agent Crossover(Agent parent1, Agent parent2)
+        public static Agent ApplyCrossover(Agent parent1, Agent parent2)
     {
         // Ensure parent1 has higher or equal fitness
         if (parent2.Fitness > parent1.Fitness)
@@ -130,4 +130,5 @@ namespace Motion{
         return new Agent(childNodes, childEdges.ToArray());
     }
 
+}
 }
