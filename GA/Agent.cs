@@ -208,11 +208,11 @@ namespace Motion{
             this.adjustedFitness = 0.0;
         } 
 
-        public double[] ForwardPass(double[] inputs) {
+        public double[] ForwardPass(NumSharp.NDArray inputs) {
 
             Dictionary<int, double> nodeValues = new Dictionary<int, double>();
 
-            for (int i = 0; i < inputs.Length; i++) {
+            for (int i = 0; i < inputs.size; i++) {
                 nodeValues[chromosomeNodes[i].Id] = inputs[i];
             }
 
