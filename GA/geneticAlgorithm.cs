@@ -21,9 +21,12 @@ namespace Motion{
             this.population = InitializePopulation();
         }
       
+        // public static float Evaluate(Agent agent, int stepsize){
+        //     agent.Fitness = Random.NextDouble();
 
+        // }
 
-        public static float Evaluate(Agent agent, int stepsize){
+        public static void Evaluate(Agent agent, int stepsize){
             CartPoleEnv cp = new CartPoleEnv(AvaloniaEnvViewer.Factory); // or AvaloniaEnvViewer.Factory
             bool done = true;
             float total_rerward = 0;
@@ -49,7 +52,7 @@ namespace Motion{
                 //Thread.Sleep(15); // Prevent the loop from finishing instantly.
             }
 
-            return total_rerward;
+            agent.Fitness =  total_rerward;
         }
         
         public Agent[] InitializePopulation(){
