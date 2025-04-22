@@ -7,7 +7,9 @@ namespace Motion
     {
         static void Main(string[] args)
         {
-            GymRunner.RunGymEnvironment();
+            //GymRunner.RunGymEnvironment();
+            GeneticAlgorithm ga = new GeneticAlgorithm();
+            ga.Main();
         }
     }
 }

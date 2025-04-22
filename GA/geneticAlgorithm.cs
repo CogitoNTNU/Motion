@@ -20,6 +20,7 @@ namespace Motion{
         public GeneticAlgorithm() {
             this.population = InitializePopulation();
         }
+      
 
 
         public static float Evaluate(Agent agent, int stepsize){
@@ -37,7 +38,7 @@ namespace Motion{
                 }
                 else
                 {
-                    var (observation, reward, _done, information) = cp.Step(action); // switching between left and right
+                    var (observation, reward, _done, information) = cp.Step((Int32)action); // switching between left and right
                     action = agent.ForwardPass(observation)[0]; // switching between left and right
                     done = _done;
                     // Do something with the reward and observation.
@@ -92,14 +93,16 @@ namespace Motion{
 
                     while (offspringCount-- > 0)
                     {
-                        var (parent1, parent2) = Selection.TournamentSelection(specie, 3); // Use your species-level method
-                        Agent child = Crossover.Crossover(parent1, parent2);
+                        var (parent1, parent2) = Selection.TournamentSelection(specie, 3); // species level selection
+                        Agent child = Crossover.ApplyCrossover(parent1, parent2);
                         Mutate.ApplyMutations(child); // implement this yourself
                         nextGeneration.Add(child);
                     }
                 }
-                
+                population = nextGeneration.ToArray();
+                Console.WriteLine($"Generation {i + 1}:   AVG NFitness: { population.Average(a => a.AdjustedFitness)}");
             }
+            return population.OrderByDescending(a => a.AdjustedFitness).First();
 
         }
 
@@ -128,11 +131,12 @@ namespace Motion{
         }
 
 
-        public void main(){
+        public void Main(){
 
             // Initialize the population
             Agent[] population = InitializePopulation();
-            bestAgent =  GA(population);
+            Agent bestAgent =  GA(population);
+            Console.WriteLine($"Best agent fitness: {bestAgent.Fitness}");
 
 
             

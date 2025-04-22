@@ -69,14 +69,14 @@ namespace Motion{
         }
 
         public static Agent ApplyCrossover(Agent parent1, Agent parent2)
+    {
+        // Ensure parent1 has higher or equal fitness
+        if (parent2.Fitness > parent1.Fitness)
         {
-            // Ensure parent1 has higher or equal fitness
-            if (parent2.Fitness > parent1.Fitness)
-            {
-                var temp = parent1;
-                parent1 = parent2;
-                parent2 = temp;
-            }
+            var temp = parent1;
+            parent1 = parent2;
+            parent2 = temp;
+        }
 
             Dictionary<int, EdgeChromosome> edgeDict1 = parent1.Edges.ToDictionary(e => e.InnovationNumber);
             Dictionary<int, EdgeChromosome> edgeDict2 = parent2.Edges.ToDictionary(e => e.InnovationNumber);
@@ -130,10 +130,6 @@ namespace Motion{
             return new Agent(childNodes, childEdges.ToArray());
         }
 
-
     }
-
-
-
 
 }
