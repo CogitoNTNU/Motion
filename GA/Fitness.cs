@@ -29,7 +29,7 @@ class Fitness{
                     
                 }
 
-                Thread.Sleep(15); // Prevent the loop from finishing instantly.
+                //Thread.Sleep(15); // Prevent the loop from finishing instantly.
             }
 
         return total_rerward;

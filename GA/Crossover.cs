@@ -117,7 +117,7 @@ namespace Motion{
                         Active = gene1.Active
                     });
                 }
-                // Skip disjoint/excess genes from less fit parent
+                    // Skip disjoint/excess genes from less fit parent
             }
 
             // Inherit nodes from the fitter parent
