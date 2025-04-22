@@ -34,22 +34,39 @@ namespace Motion{
             
         }
 
-        public static int GetNumberOfDisjointEdges(EdgeChromosome[] edges1, EdgeChromosome[] edges2, (int, int) innovationRange) {
-            int disjointEdges = 0;
-            foreach (var edge in edges1) {
-                if (edge.InnovationNumber < innovationRange.Item1 || edge.InnovationNumber > innovationRange.Item2) {
-                    continue;
-                }
+        // public static int GetNumberOfDisjointEdges(EdgeChromosome[] edges1, EdgeChromosome[] edges2, (int, int) innovationRange) {
+        //     int disjointEdges = 0;
+        //     foreach (var edge in edges1) {
+        //         if (edge.InnovationNumber < innovationRange.Item1 || edge.InnovationNumber > innovationRange.Item2) {
+        //             continue;
+        //         }
                 
-                foreach (var edge2 in edges2) {
-                    if (edge.InnovationNumber == edge2.InnovationNumber) {
-                        break;
-                    }
+        //         foreach (var edge2 in edges2) {
+        //             if (edge.InnovationNumber == edge2.InnovationNumber) {
+        //                 break;
+        //             }
+        //             disjointEdges++;
+        //         }
+        //     }   
+        //     return disjointEdges;           
+        // }
+
+        public static int GetNumberOfDisjointEdges(EdgeChromosome[] edges1, EdgeChromosome[] edges2, (int, int) innovationRange)
+        {
+            var set2 = new HashSet<int>(edges2.Select(e => e.InnovationNumber));
+            int disjointEdges = 0;
+            foreach (var edge in edges1)
+            {
+                if (edge.InnovationNumber >= innovationRange.Item1 &&
+                    edge.InnovationNumber <= innovationRange.Item2 &&
+                    !set2.Contains(edge.InnovationNumber))
+                {
                     disjointEdges++;
                 }
-            }   
-            return disjointEdges;           
+            }
+            return disjointEdges;
         }
+
         
         public static int GetNumberOFExcessEdges(EdgeChromosome[] edges1, EdgeChromosome[] edges2, (int,int) innovationRange) {
             int excessEdges = 0;
@@ -81,14 +98,18 @@ namespace Motion{
 
             double N = Math.Max(edges1.Length, edges2.Length);
             double W = 0;
-
+            int matching = 0;
             foreach (EdgeChromosome edge1 in edges1) {
                 foreach (EdgeChromosome edge2 in edges2) {
                     if (edge1.InnovationNumber == edge2.InnovationNumber) {
                         W += Math.Abs(edge1.Weight - edge2.Weight);
+                        matching++;
+                        break;
                     }
                 }
             }
+            if (matching > 0) W /= matching;
+
             
             (int, int) innovationRange = GetInnovationRange(agent1, agent2);
             int D = GetNumberOfDisjointEdges(edges1, edges2, innovationRange);
