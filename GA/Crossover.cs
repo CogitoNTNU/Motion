@@ -69,71 +69,65 @@ namespace Motion{
         }
 
         public static Agent Crossover(Agent parent1, Agent parent2)
-{
-    // Ensure parent1 has higher or equal fitness
-    if (parent2.Fitness > parent1.Fitness)
     {
-        var temp = parent1;
-        parent1 = parent2;
-        parent2 = temp;
-    }
-
-    Dictionary<int, EdgeChromosome> edgeDict1 = parent1.Edges.ToDictionary(e => e.InnovationNumber);
-    Dictionary<int, EdgeChromosome> edgeDict2 = parent2.Edges.ToDictionary(e => e.InnovationNumber);
-
-    List<EdgeChromosome> childEdges = new List<EdgeChromosome>();
-
-    HashSet<int> allInnovationNumbers = new HashSet<int>(edgeDict1.Keys);
-    allInnovationNumbers.UnionWith(edgeDict2.Keys);
-
-    foreach (int innovation in allInnovationNumbers)
-    {
-        bool has1 = edgeDict1.TryGetValue(innovation, out var gene1);
-        bool has2 = edgeDict2.TryGetValue(innovation, out var gene2);
-
-        if (has1 && has2)
+        // Ensure parent1 has higher or equal fitness
+        if (parent2.Fitness > parent1.Fitness)
         {
-            // Matching gene - randomly choose
-            var chosen = (new Random().Next(2) == 0) ? gene1 : gene2;
-            bool isDisabled = !gene1.Active || !gene2.Active;
-            childEdges.Add(new EdgeChromosome(
-                chosen.InnovationNumber,
-                chosen.FromId,
-                chosen.ToId,
-                chosen.Weight)
-            {
-                Active = isDisabled ? false : true
-            });
+            var temp = parent1;
+            parent1 = parent2;
+            parent2 = temp;
         }
-        else if (has1)
+
+        Dictionary<int, EdgeChromosome> edgeDict1 = parent1.Edges.ToDictionary(e => e.InnovationNumber);
+        Dictionary<int, EdgeChromosome> edgeDict2 = parent2.Edges.ToDictionary(e => e.InnovationNumber);
+
+        List<EdgeChromosome> childEdges = new List<EdgeChromosome>();
+
+        HashSet<int> allInnovationNumbers = new HashSet<int>(edgeDict1.Keys);
+        allInnovationNumbers.UnionWith(edgeDict2.Keys);
+
+        foreach (int innovation in allInnovationNumbers)
         {
-            // Disjoint/excess gene from more fit parent
-            childEdges.Add(new EdgeChromosome(
-                gene1.InnovationNumber,
-                gene1.FromId,
-                gene1.ToId,
-                gene1.Weight)
+            bool has1 = edgeDict1.TryGetValue(innovation, out var gene1);
+            bool has2 = edgeDict2.TryGetValue(innovation, out var gene2);
+
+            if (has1 && has2)
             {
-                Active = gene1.Active
-            });
+                // Matching gene - randomly choose
+                var chosen = (new Random().Next(2) == 0) ? gene1 : gene2;
+                bool isDisabled = !gene1.Active || !gene2.Active;
+                childEdges.Add(new EdgeChromosome(
+                    chosen.InnovationNumber,
+                    chosen.FromId,
+                    chosen.ToId,
+                    chosen.Weight)
+                {
+                    Active = isDisabled ? false : true
+                });
+            }
+            else if (has1)
+            {
+                // Disjoint/excess gene from more fit parent
+                childEdges.Add(new EdgeChromosome(
+                    gene1.InnovationNumber,
+                    gene1.FromId,
+                    gene1.ToId,
+                    gene1.Weight)
+                {
+                    Active = gene1.Active
+                });
+            }
+            // Skip disjoint/excess genes from less fit parent
         }
-        // Skip disjoint/excess genes from less fit parent
+
+        // Inherit nodes from the fitter parent
+        var childNodes = parent1.Nodes.Select(n =>
+            new NodeChromosome(n.Id, n.Bias, n.Activation, n.Type)
+            {
+                Active = n.Active
+            }).ToArray();
+
+        return new Agent(childNodes, childEdges.ToArray());
     }
-
-    // Inherit nodes from the fitter parent
-    var childNodes = parent1.Nodes.Select(n =>
-        new NodeChromosome(n.Id, n.Bias, n.Activation, n.Type)
-        {
-            Active = n.Active
-        }).ToArray();
-
-    return new Agent(childNodes, childEdges.ToArray());
-}
-
-
-    }
-
-
-
 
 }
