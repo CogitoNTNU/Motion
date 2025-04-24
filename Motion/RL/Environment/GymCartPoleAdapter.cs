@@ -14,6 +14,7 @@ namespace RL.Environment
         {
             // Initialize the CartPole environment with Avalonia viewer if needed.
             _gymEnv = new CartPoleEnv(AvaloniaEnvViewer.Factory);
+            _gymEnv.Seed(42);
         }
 
         public NDArray Reset()
@@ -25,7 +26,6 @@ namespace RL.Environment
         public (NDArray nextState, float reward, bool done, object info) Step(int action)
         {
             var (nextState, reward, done, info) = _gymEnv.Step(action);
-            Console.WriteLine($"Raw reward: {reward}");
             return (nextState, (float)reward, done, info);
         }
 
