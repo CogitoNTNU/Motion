@@ -14,7 +14,7 @@ using Gym.Rendering.Avalonia;
 namespace Motion{
 
     class GeneticAlgorithm {
-        public Agent[] population;
+        public List<Agent> population;
         public Config config = Config.Instance();
 
         public GeneticAlgorithm() {
@@ -43,7 +43,7 @@ namespace Motion{
                 {
                     var (observation, reward, _done, information) = cp.Step((Int32)action); // switching between left and right
                     action = agent.ForwardPass(observation)[0]; // switching between left and right
-                    Console.WriteLine($"Action: {action}");
+                    // Console.WriteLine($"Action: {action}");
                     if (action > 0.001){
                         action = 1;
                     }else{
@@ -62,22 +62,23 @@ namespace Motion{
             agent.Fitness =  total_rerward;
         }
         
-        public Agent[] InitializePopulation(){
-            Agent[] population = new Agent[config.PopulationSize];
+        public List<Agent> InitializePopulation(){
+            List<Agent> population = new List<Agent>(); // Initialize the population with the specified size
             for (int i = 0; i < config.PopulationSize; i++)
             {
-                population[i] = Agent.InitializeAgent(4, 1, 5);    // must add up to population-size
+                Agent agent = Agent.InitializeAgent(4, 1, 5);
+                population.Add(agent);
             }
             return population;
         }
 
 
-        public Agent GA(Agent[] population){
+        public Agent GA(List<Agent> population){
 
             for (int i = 0; i < config.NumGenerations; i++) {
 
                 // evaluate
-                for (int j = 0; j < population.Length; j++)
+                for (int j = 0; j < population.Count; j++)
                 {
                     Evaluate(population[j], 1);
                 }
@@ -85,7 +86,7 @@ namespace Motion{
                 List<List<Agent>> species = Speciation.SpeciateAndFitnessSharing(population, 1.0, 0.8, 0.8, 0.3, 0.5);
 
                 List<Agent> nextGeneration = new List<Agent>();
-                int totalPopulation = population.Length;
+                int totalPopulation = population.Count;
 
                 foreach (var specie in species)
                 {
@@ -109,7 +110,7 @@ namespace Motion{
                         nextGeneration.Add(child);
                     }
                 }
-                population = nextGeneration.ToArray();
+                population = nextGeneration;
                 Console.WriteLine($"Generation {i + 1}:   AVG NFitness: { population.Average(a => a.AdjustedFitness)}");
             }
             return population.OrderByDescending(a => a.AdjustedFitness).First();
@@ -144,7 +145,7 @@ namespace Motion{
         public void Main(){
 
             // Initialize the population
-            Agent[] population = InitializePopulation();
+            List<Agent> population = InitializePopulation();
             Agent bestAgent =  GA(population);
             Console.WriteLine($"Best agent fitness: {bestAgent.Fitness}");
 

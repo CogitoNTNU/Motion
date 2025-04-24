@@ -134,7 +134,7 @@ namespace Motion{
                     return node;
                 }
             }
-            return null;
+            throw new InvalidOperationException($"NodeChromosome with ID {id} not found.");
         }
 
         public void AddNode(NodeChromosome node) {
@@ -154,7 +154,7 @@ namespace Motion{
         }
 
         // TODO: implement strategy pattern for Agent
-        public static Agent InitializeAgent(int inputs, int outputs, int initialHidden) {
+        public static Agent InitializeAgent2(int inputs, int outputs, int initialHidden) {
 
             List<EdgeChromosome> chromosomeEdges = new List<EdgeChromosome>(0); // initialize empty list of edges
             // nodes and edges are initialized here
@@ -185,7 +185,7 @@ namespace Motion{
                 for (int node = 0; node < numNodes; node++) {
 
                     for (int nextLayerNode = 0; nextLayerNode < numNodesNextLayer; nextLayerNode++)
-                        chromosomeEdges.Append(
+                        chromosomeEdges.Add(
                             new EdgeChromosome(
                                 Innovation.GetInstance().GetInnovationNumber( currentNodeId, nextNodeId + nextLayerNode), 
                                 currentNodeId, 
@@ -199,6 +199,40 @@ namespace Motion{
             }
 
             return new Agent(chromosomeNodes, chromosomeEdges);
+        }
+        public static Agent InitializeAgent(int inputs, int outputs, int initialHidden) {
+            List<EdgeChromosome> chromosomeEdges = new List<EdgeChromosome>();
+            List<NodeChromosome> inputNodes = NodeFactory(inputs, 0.0, "relu", NodeType.Input);
+            List<NodeChromosome> hiddenNodes = NodeFactory(initialHidden, 0.5, "relu", NodeType.Hidden);
+            List<NodeChromosome> outputNodes = NodeFactory(outputs, 0.5, "relu", NodeType.Output);
+
+            List<NodeChromosome> allNodes = inputNodes.Concat(hiddenNodes).Concat(outputNodes).ToList();
+
+            // Connect input to hidden
+            foreach (var inputNode in inputNodes) {
+                foreach (var hiddenNode in hiddenNodes) {
+                    chromosomeEdges.Add(new EdgeChromosome(
+                        Innovation.GetInstance().GetInnovationNumber(inputNode.Id, hiddenNode.Id),
+                        inputNode.Id,
+                        hiddenNode.Id,
+                        0.5
+                    ));
+                }
+            }
+
+            // Connect hidden to output
+            foreach (var hiddenNode in hiddenNodes) {
+                foreach (var outputNode in outputNodes) {
+                    chromosomeEdges.Add(new EdgeChromosome(
+                        Innovation.GetInstance().GetInnovationNumber(hiddenNode.Id, outputNode.Id),
+                        hiddenNode.Id,
+                        outputNode.Id,
+                        0.5
+                    ));
+                }
+            }
+
+            return new Agent(allNodes, chromosomeEdges);
         }
 
         public Agent(List<NodeChromosome> chromosomeNodes, List<EdgeChromosome> chromosomeEdges){

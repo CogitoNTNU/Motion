@@ -70,20 +70,25 @@ namespace Motion{
         }
 
         public static Agent ApplyCrossover(Agent parent1, Agent parent2)
-    {
-        // Ensure parent1 has higher or equal fitness
-        if (parent2.Fitness > parent1.Fitness)
         {
-            var temp = parent1;
-            parent1 = parent2;
-            parent2 = temp;
-        }
+            // Ensure parent1 has higher or equal fitness
+            if (parent2.Fitness > parent1.Fitness)
+            {
+                var temp = parent1;
+                parent1 = parent2;
+                parent2 = temp;
+            }
 
-            Dictionary<int, EdgeChromosome> edgeDict1 = parent1.Edges.ToDictionary(e => e.InnovationNumber);
-            Dictionary<int, EdgeChromosome> edgeDict2 = parent2.Edges.ToDictionary(e => e.InnovationNumber);
+            // Handle potential duplicate innovation numbers
+            var edgeDict1 = parent1.Edges
+                .GroupBy(e => e.InnovationNumber)
+                .ToDictionary(g => g.Key, g => g.First()); // Take first if duplicates exist
+
+            var edgeDict2 = parent2.Edges
+                .GroupBy(e => e.InnovationNumber)
+                .ToDictionary(g => g.Key, g => g.First()); // Take first if duplicates exist
 
             List<EdgeChromosome> childEdges = new List<EdgeChromosome>();
-
             HashSet<int> allInnovationNumbers = new HashSet<int>(edgeDict1.Keys);
             allInnovationNumbers.UnionWith(edgeDict2.Keys);
 
@@ -103,7 +108,7 @@ namespace Motion{
                         chosen.ToId,
                         chosen.Weight)
                     {
-                        Active = isDisabled ? false : true
+                        Active = !isDisabled
                     });
                 }
                 else if (has1)
@@ -118,7 +123,7 @@ namespace Motion{
                         Active = gene1.Active
                     });
                 }
-                    // Skip disjoint/excess genes from less fit parent
+                // Skip disjoint/excess genes from less fit parent
             }
 
             // Inherit nodes from the fitter parent
@@ -126,11 +131,10 @@ namespace Motion{
                 new NodeChromosome(n.Id, n.Bias, n.Activation, n.Type)
                 {
                     Active = n.Active
-                }).ToArray();
+                }).ToList();
 
-            return new Agent(childNodes.ToList(), childEdges.ToList());
+            return new Agent(childNodes, childEdges);
         }
-
     }
 
 }

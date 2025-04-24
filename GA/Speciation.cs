@@ -115,13 +115,15 @@ namespace Motion{
             int D = GetNumberOfDisjointEdges(edges1, edges2, innovationRange);
             int E = GetNumberOFExcessEdges(edges1, edges2, innovationRange);
 
-            return (C1 * E / N ) + (C2 * D / N) + C3 * W;
+            double distance =  (C1 * E / N ) + (C2 * D / N) + C3 * W;
+            Console.WriteLine(distance);
+            return distance;
             
         }
 
 
 
-        public static List<List<Agent>> Speciate(Agent[] population, double distanceThreshold) {
+        public static List<List<Agent>> Speciate(List<Agent> population, double distanceThreshold) {
             List<List<Agent>> species = new List<List<Agent>>(); 
 
             foreach (Agent agent in population) {
@@ -143,15 +145,15 @@ namespace Motion{
             return species;
         }
 
-        public static void FitnessSharingWithoutSpecies(Agent[] population, double c1, double c2, double c3, double deltaT)
+        public static void FitnessSharingWithoutSpecies(List<Agent> population, double c1, double c2, double c3, double deltaT)
         {
             // Iterate over each agent in the population.
-            for (int i = 0; i < population.Length; i++)
+            for (int i = 0; i < population.Count; i++)
             {
                 double sharingSum = 0.0;
 
                 // Compare the current agent with every other agent.
-                for (int j = 0; j < population.Length; j++)
+                for (int j = 0; j < population.Count; j++)
                 {
                     double distance = Distance(population[i], population[j]);
                     if (distance < deltaT)
@@ -183,7 +185,7 @@ namespace Motion{
             }
         }
 
-        public static List<List<Agent>> SpeciateAndFitnessSharing(Agent[] population, double distanceThreshold, double c1, double c2, double c3, double deltaT) {
+        public static List<List<Agent>> SpeciateAndFitnessSharing(List<Agent> population, double distanceThreshold, double c1, double c2, double c3, double deltaT) {
             List<List<Agent>> species = Speciate(population, distanceThreshold);
             FitnessSharingAcrossSpecies(species);
             return species;
