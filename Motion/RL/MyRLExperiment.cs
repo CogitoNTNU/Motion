@@ -43,7 +43,8 @@ public class MyRLExperiment
         {
             // Reset the environment and convert the state to a flat float array.
             NDArray stateND = env.Reset();
-            float[] stateFloats = stateND.reshape(-1).ToArray<float>();
+            double[] stateDoubles = stateND.reshape(-1).ToArray<double>();
+            float[] stateFloats = Array.ConvertAll(stateDoubles, d => (float)d);
             float episodeReward = 0f;
             bool done = false;
 
@@ -61,7 +62,9 @@ public class MyRLExperiment
                 episodeReward += reward;
 
                 // Convert the next state NDArray to a flat float array.
-                float[] nextStateFloats = nextStateND.reshape(-1).ToArray<float>();
+                double[] nextStateDoubles = nextStateND.reshape(-1).ToArray<double>();
+
+                float[] nextStateFloats = Array.ConvertAll(nextStateDoubles, d => (float)d);
 
                 // Create a transition (using TransitionPortable<float[]> since our state is float[]).
                 var transition = new TransitionPortable<float[]>(
