@@ -260,9 +260,13 @@ namespace Motion{
                 if (graph.ContainsKey(nodeId))
                     foreach (int to in graph[nodeId]) Visit(to);
 
-                var node = GetNodeChromosomeFromId(nodeId);
-                if (node != null)
+                try {
+                    var node = GetNodeChromosomeFromId(nodeId);
                     sorted.Add(node);
+                    
+                } catch (InvalidOperationException) {
+                    // Node not found, ignore it
+                }
             }
 
             foreach (var node in chromosomeNodes.Where(n => n.Type == NodeType.Input))

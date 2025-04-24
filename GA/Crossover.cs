@@ -26,10 +26,14 @@ namespace Motion{
         public static void addNodeToChromosome(Agent parent, List<NodeChromosome> childChromosomeNodes, int nodeId){
             int edgeChromosomeLength = parent.Edges.Count;
 
-            NodeChromosome node = parent.GetNodeChromosomeFromId(nodeId);
-            if (node != null && IsNotNodeInChromosome(node, childChromosomeNodes)){
-                childChromosomeNodes.Add(new NodeChromosome(nodeId, node.Bias, node.Activation, node.Type));
-            }    
+            try {
+                NodeChromosome node = parent.GetNodeChromosomeFromId(nodeId);
+                if (IsNotNodeInChromosome(node, childChromosomeNodes)){
+                    childChromosomeNodes.Add(new NodeChromosome(nodeId, node.Bias, node.Activation, node.Type));
+                }    
+            } catch (InvalidOperationException) {
+                // ignore if node not found
+            }
         }
 
         public static Agent dominantCrossover(Agent parent1, Agent parent2){

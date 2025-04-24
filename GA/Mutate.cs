@@ -102,10 +102,14 @@ namespace Motion{
                 List<EdgeChromosome> swapCandidates = new List<EdgeChromosome>();
                 foreach (EdgeChromosome edge in edges)
                 {
-                    // find all edges that have an input node as the from node
-                    if (agent.GetNodeChromosomeFromId(edge.FromId).Type == NodeType.Input){
-                        swapCandidates.Add(edge);
-                    } 
+                    try {
+                        // find all edges that have an input node as the from node
+                        if (agent.GetNodeChromosomeFromId(edge.FromId).Type == NodeType.Input){
+                            swapCandidates.Add(edge);
+                        } 
+                    } catch (InvalidOperationException) {
+                        // Ignore edges that don't have a valid from node
+                    }
                 }
                 // choose two random fromIDs from the swapCandidates
                 int index1 = Random.Next(0, swapCandidates.Count);
