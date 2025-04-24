@@ -24,10 +24,11 @@ namespace RL.Environment
 
         public (NDArray nextState, float reward, bool done, object info) Step(int action)
         {
-            // _gymEnv.Step(action) should return a tuple with an NDArray as the first element.
             var (nextState, reward, done, info) = _gymEnv.Step(action);
+            Console.WriteLine($"Raw reward: {reward}");
             return (nextState, (float)reward, done, info);
         }
+
 
         public object Render()
         {

@@ -9,7 +9,7 @@ namespace Motion
         {
             // GymRunner.RunGymEnvironment();
             MyRLExperiment experiment = new MyRLExperiment();
-            experiment.RunPPO(useCuda: false); 
+            experiment.RunPPO(); 
         }
     }
 }

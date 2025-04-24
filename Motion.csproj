@@ -11,8 +11,8 @@
     <PackageReference Include="Gym.NET" Version="0.2.0" />
     <PackageReference Include="Gym.NET.Environments" Version="0.2.0" />
     <PackageReference Include="Gym.NET.Rendering.Avalonia" Version="0.2.0" />
-    <PackageReference Include="TorchSharp" Version="0.105.0" />
-    <PackageReference Include="TorchSharp-cpu" Version="0.105.0" />
+    <PackageReference Include="TorchSharp" Version="0.102.2" />
+    <PackageReference Include="TorchSharp-cpu" Version="0.102.2" />
 
     <ProjectReference Include="..\RL_Matrix\src\RLMatrix\RLMatrix.csproj" />
   </ItemGroup>
