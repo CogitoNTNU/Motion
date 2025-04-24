@@ -116,7 +116,7 @@ namespace Motion{
             int E = GetNumberOFExcessEdges(edges1, edges2, innovationRange);
 
             double distance =  (C1 * E / N ) + (C2 * D / N) + C3 * W;
-            Console.WriteLine(distance);
+            //Console.WriteLine(distance);
             return distance;
             
         }

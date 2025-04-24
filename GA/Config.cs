@@ -21,6 +21,7 @@ namespace Motion
         private double crossoverRate = 0.8;
         private int elitismCount = 20;
         private int chromosomeSize = 10;
+
         
         private Config() { 
             instance = this;
@@ -68,6 +69,8 @@ namespace Motion
             get { return chromosomeSize; }
             set { chromosomeSize = value; }
         }
+
+        
 
 
 
