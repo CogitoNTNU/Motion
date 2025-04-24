@@ -7,12 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RLMatrix", "src\RLMatrix\RL
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{BFC4A676-39DF-4538-9A26-029CC69D283C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{1CBFC817-5DA3-4EA2-9703-000F9235F7B4}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CartPole-v1", "examples\CartPole-v1\CartPole-v1.csproj", "{31D410AB-F141-420B-9768-F373C782B4FF}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LunarLander", "examples\LunarLander\LunarLander.csproj", "{DF211B1B-7596-4369-8B2D-7279831F61AC}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{70B48B2C-4375-4F03-BBC6-6097BCCC54D1}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -23,8 +17,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Godot", "Godot", "{F8297F0F-5E29-40CE-AC8C-94AA746E3E18}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BallBalance", "examples\Godot\BallBalance\BallBalance.csproj", "{966ECDFC-96BF-40D8-BCD1-7099E1201511}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RLMatrix.Remote", "src\RLMatrix.Remote\RLMatrix.Remote.csproj", "{AAD3C71E-B5B8-4677-9C97-949CA3A77022}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RLMatrix.Common", "src\RLMatrix.Common\RLMatrix.Common.csproj", "{F00F1321-2910-4F6F-BA3A-5BEC270F2258}"
@@ -32,10 +24,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RLMatrix.Server", "src\RLMatrix.Server\RLMatrix.Server.csproj", "{552E0777-D81A-4848-88AD-49E7FCA5C8B0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Networked", "Networked", "{441B27E2-C9AA-4F7E-A47C-B2F649636DAD}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CartPole-v1-Server", "examples\Networked\CartPole-v1-Server\CartPole-v1-Server.csproj", "{EE08C2FA-5531-406A-8EA0-FC4ADA364A14}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CartPole-v1-Client", "examples\Networked\CartPole-v1-Client\CartPole-v1-Client.csproj", "{18CE92C4-3546-440D-BD0C-EEA34474854C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RLMatrix.Common.Remote", "src\RLMatrix.Common.Remote\RLMatrix.Common.Remote.csproj", "{0DB0DE7D-9A9D-413F-BBFE-C8AE1040FE53}"
 EndProject
