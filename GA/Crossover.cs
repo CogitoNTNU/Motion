@@ -28,7 +28,7 @@ namespace Motion{
 
             NodeChromosome node = parent.GetNodeChromosomeFromId(nodeId);
             if (node != null && IsNotNodeInChromosome(node, childChromosomeNodes)){
-                childChromosomeNodes.Append(new NodeChromosome(nodeId, node.Bias, node.Activation, node.Type));
+                childChromosomeNodes.Add(new NodeChromosome(nodeId, node.Bias, node.Activation, node.Type));
             }    
         }
 
@@ -48,7 +48,7 @@ namespace Motion{
 
             for (int i = 0; i < edgeChromosomeLength; i++ ){
                 if (IsNotEdgeInChromosome(dominant.Edges[i], childChromosomeEdges) && i < dominant.Edges.Count){
-                    childChromosomeEdges.Append(new EdgeChromosome(index, dominant.Edges[i].FromId, dominant.Edges[i].ToId, dominant.Edges[i].Weight));
+                    childChromosomeEdges.Add(new EdgeChromosome(index, dominant.Edges[i].FromId, dominant.Edges[i].ToId, dominant.Edges[i].Weight));
                     index++;
             
                     addNodeToChromosome(dominant, childChromosomeNodes, dominant.Edges[i].FromId);
@@ -56,7 +56,7 @@ namespace Motion{
                     
 
                 }else if (IsNotEdgeInChromosome(notDominant.Edges[i], childChromosomeEdges) && i < notDominant.Edges.Count){
-                    childChromosomeEdges.Append(new EdgeChromosome(index, notDominant.Edges[i].FromId, notDominant.Edges[i].ToId, notDominant.Edges[i].Weight));
+                    childChromosomeEdges.Add(new EdgeChromosome(index, notDominant.Edges[i].FromId, notDominant.Edges[i].ToId, notDominant.Edges[i].Weight));
                     index++;
 
                     addNodeToChromosome(notDominant, childChromosomeNodes, notDominant.Edges[i].FromId);

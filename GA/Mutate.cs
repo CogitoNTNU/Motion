@@ -104,7 +104,7 @@ namespace Motion{
                 {
                     // find all edges that have an input node as the from node
                     if (agent.GetNodeChromosomeFromId(edge.FromId).Type == NodeType.Input){
-                        swapCandidates.Append(edge);
+                        swapCandidates.Add(edge);
                     } 
                 }
                 // choose two random fromIDs from the swapCandidates
@@ -164,6 +164,7 @@ namespace Motion{
         {
             Random random = new Random();
 
+            // Process nodes first (safe since we're not adding/removing nodes)
             foreach (var node in agent.Nodes)
             {
                 MutateNodeBias(node, Config.Instance().NodeBiasMutation);
@@ -171,14 +172,24 @@ namespace Motion{
                 MutateActivation(node, Config.Instance().ActivationMutation);
             }
 
-            foreach (var edge in agent.Edges)
+            // Create a copy of edges to avoid modification during enumeration
+            var edgesCopy = agent.Edges.ToList();
+            
+            // First process all mutations that don't add new edges
+            foreach (var edge in edgesCopy)
             {
                 MutateEdgeWeight(edge, Config.Instance().EdgeWeightMutation);
                 MutateSetEdgeWeight(edge, Config.Instance().EdgeWeightSetMutation);
                 MutateEdgeActiveStatus(edge, Config.Instance().ToggleEdgeActiveMutation);
+            }
+
+            // Then process mutations that might add new edges
+            foreach (var edge in edgesCopy)
+            {
                 MutateNewNode(edge, agent, Config.Instance().AddNodeMutation);
             }
 
+            // These can stay as is since they don't iterate over edges
             AddEdgeMutation(agent, Config.Instance().AddEdgeMutation);
             SwapEdgesFromInput(agent, Config.Instance().SwapInputEdges);
         }
