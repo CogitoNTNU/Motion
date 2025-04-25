@@ -32,7 +32,7 @@ namespace Motion{
             float total_rerward = 0;
             var action = 0.0; 
             
-            for (int i = 0; i < 10000; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 if (done)
                 {
@@ -81,13 +81,13 @@ namespace Motion{
                 // Evaluation
                 Parallel.For(0, population.Count, j => 
                 {
-                    Evaluate(population[j], 1);
+                    Evaluate(population[j], 10);
                 });
 
                 // Speciation
                 List<List<Agent>> species = Speciation.SpeciateAndFitnessSharing(
                     population, 0.3, 
-                    1.0, 0.8, 0.3, 0.5);
+                    1.0, 0.8, 0.3, 0.9);
 
                 Console.WriteLine($"Species count: {species.Count}");
                 List<Agent> nextGeneration = new List<Agent>();
@@ -162,12 +162,51 @@ namespace Motion{
         }
 
 
+
+        public void Run(Agent agent, int stepsize){
+
+            CartPoleEnv cp = new CartPoleEnv(AvaloniaEnvViewer.Factory); 
+            bool done = true;
+            float total_rerward = 0;
+            var action = 0.0; 
+            for (int i = 0; i < 100_000; i++)
+            {
+                if (done)
+                {
+                    NDArray observation = cp.Reset();
+                    done = false;
+                }
+                else
+                {
+                    var (observation, reward, _done, information) = cp.Step((Int32)action); // switching between left and right
+                    action = agent.ForwardPass(observation)[0]; // switching between left and right
+                    // Console.WriteLine($"Action: {action}");
+                    //cp.Render();
+                    if (action > 0.01){
+                        action = 1;
+                    }else{
+                        action = 0;
+                    }
+                    done = _done;
+                    // Do something with the reward and observation.
+                }
+
+                SixLabors.ImageSharp.Image img = cp.Render(); //returns the image that was rendered.
+                Thread.Sleep(15); //this is to prevent it from finishing instantly !
+            }
+
+            //cp.Close();
+
+        }
+
+
         public void Main(){
 
             // Initialize the population
             List<Agent> population = InitializePopulation();
             Agent bestAgent =  GA(population);
             Console.WriteLine($"Best agent fitness: {bestAgent.Fitness}");
+            Run(bestAgent, 1);
             
 
             
