@@ -5,7 +5,7 @@ namespace Motion
         // singleton constructor
         private static Config instance = null;
         private int populationSize = 50;
-        private int numGenerations = 100;
+        private int numGenerations = 20;
 
         public double NodeBiasMutation = 0.8;
         public double NodeBiasSetMutation = 0.1;

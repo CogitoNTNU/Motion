@@ -11,6 +11,8 @@
     <PackageReference Include="Gym.NET" Version="0.2.0" />
     <PackageReference Include="Gym.NET.Environments" Version="0.2.0" />
     <PackageReference Include="Gym.NET.Rendering.Avalonia" Version="0.2.0" />
+    <AvaloniaResource Include="App.xaml" />
   </ItemGroup>
+  
 
 </Project>

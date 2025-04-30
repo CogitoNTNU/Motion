@@ -167,7 +167,6 @@ namespace Motion{
 
             CartPoleEnv cp = new CartPoleEnv(AvaloniaEnvViewer.Factory); 
             bool done = true;
-            float total_rerward = 0;
             var action = 0.0; 
             for (int i = 0; i < 100_000; i++)
             {
@@ -202,6 +201,8 @@ namespace Motion{
 
         public void Main(){
 
+            
+            
             // Initialize the population
             List<Agent> population = InitializePopulation();
             Agent bestAgent =  GA(population);
